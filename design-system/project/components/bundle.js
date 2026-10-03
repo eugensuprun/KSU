@@ -5,7 +5,7 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.13.0', smoother: null };
+  var api = { version: '0.14.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
@@ -623,6 +623,19 @@
     }
   }
 
+  // Silent video loops inside photo frames. They play only while on screen, and not at all under reduced motion.
+  function loops() {
+    all('video.ksu-photo').forEach(function (v) {
+      v.muted = true;
+      if (reduce) { v.removeAttribute('autoplay'); v.pause(); return; }
+      if (!('IntersectionObserver' in window)) return;
+      new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+        else v.pause();
+      }, { threshold: 0.1 }).observe(v.parentNode);
+    });
+  }
+
   // Make the whole of a list row act as its control: pressing the title or the empty space plays the mix,
   // or opens the row's link when it has no play button. Presses on a link or button inside the row keep their own meaning.
   function rowActions() {
@@ -662,6 +675,7 @@
     all('[data-ksu-marquee]').forEach(marquee);
     player();
     rowActions();
+    loops();
     if (!all('[data-ksu-hero], [data-ksu-cover]').length) shown();
     if (has) ST.refresh();
   }
