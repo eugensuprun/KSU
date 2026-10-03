@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KSU - DJ / Event Producer</title>
+<meta name="description" content="KSU is a Ukrainian DJ and event producer from Odesa. Techno, Melodic Techno, Indie Dance. Available worldwide for clubs, festivals, residencies and private events.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="design-system/tokens.css">
+<link rel="stylesheet" href="design-system/project/components/bundle.css">
+<link rel="stylesheet" href="site.css">
+<script>
+  // Hide the hero until its intro starts; give up after 3s so the page is never left blank.
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('ksu-motion');
+    setTimeout(function () { document.documentElement.classList.remove('ksu-motion'); }, 3000);
+  }
+</script>
+</head>
+<body>
+
+<div class="ksu-curtain" data-ksu-curtain aria-hidden="true">
+  <div class="ksu-curtain__bars"><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="ksu-curtain__top"><span>International DJ portfolio<br>Odesa, Ukraine</span><span data-ksu-count>000</span></div>
+  <div class="ksu-curtain__name"><span class="ksu-curtain__ghost">KSU</span><span class="ksu-curtain__fill">KSU</span></div>
+</div>
+<div class="ksu-grain" data-ksu-grain aria-hidden="true"><div class="ksu-grain__tex"></div></div>
+<div class="site-backdrop"></div>
+
+
+<div class="ksu-player" data-ksu-player hidden>
+  <button class="ksu-play" type="button" data-ksu-player-toggle aria-pressed="false" aria-label="Play or pause"><svg viewBox="0 0 10 10" aria-hidden="true"><path class="ksu-play__play" d="M1 0 10 5 1 10Z"/><path class="ksu-play__pause" d="M1 0H4V10H1ZM6 0H9V10H6Z"/></svg></button>
+  <div class="ksu-player__body">
+    <div class="ksu-player__head"><svg class="ksu-eq" viewBox="0 0 10 10" aria-hidden="true"><rect x="0" y="0" width="2" height="10"/><rect x="4" y="0" width="2" height="10"/><rect x="8" y="0" width="2" height="10"/></svg><p class="ksu-player__title" aria-live="polite"></p></div>
+    <div class="ksu-player__progress ksu-player__progress--wave" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><svg class="ksu-wave" viewBox="0 0 478 48" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="21.0" width="3" height="6.0"/><rect x="5" y="17.9" width="3" height="12.1"/><rect x="10" y="18.1" width="3" height="11.9"/><rect x="15" y="17.1" width="3" height="13.7"/><rect x="20" y="19.2" width="3" height="9.6"/><rect x="25" y="20.6" width="3" height="6.7"/><rect x="30" y="19.9" width="3" height="8.2"/><rect x="35" y="19.4" width="3" height="9.1"/><rect x="40" y="20.1" width="3" height="7.9"/><rect x="45" y="20.0" width="3" height="8.0"/><rect x="50" y="16.1" width="3" height="15.9"/><rect x="55" y="15.1" width="3" height="17.9"/><rect x="60" y="8.6" width="3" height="30.9"/><rect x="65" y="11.7" width="3" height="24.7"/><rect x="70" y="7.3" width="3" height="33.4"/><rect x="75" y="13.2" width="3" height="21.6"/><rect x="80" y="15.2" width="3" height="17.5"/><rect x="85" y="20.9" width="3" height="6.2"/><rect x="90" y="15.2" width="3" height="17.5"/><rect x="95" y="9.9" width="3" height="28.2"/><rect x="100" y="8.2" width="3" height="31.5"/><rect x="105" y="3.4" width="3" height="41.1"/><rect x="110" y="9.1" width="3" height="29.8"/><rect x="115" y="7.2" width="3" height="33.6"/><rect x="120" y="15.3" width="3" height="17.3"/><rect x="125" y="18.3" width="3" height="11.4"/><rect x="130" y="19.1" width="3" height="9.7"/><rect x="135" y="14.4" width="3" height="19.2"/><rect x="140" y="14.4" width="3" height="19.1"/><rect x="145" y="12.9" width="3" height="22.2"/><rect x="150" y="14.9" width="3" height="18.2"/><rect x="155" y="17.0" width="3" height="14.0"/><rect x="160" y="18.9" width="3" height="10.3"/><rect x="165" y="20.6" width="3" height="6.8"/><rect x="170" y="21.0" width="3" height="6.0"/><rect x="175" y="20.4" width="3" height="7.3"/><rect x="180" y="17.8" width="3" height="12.4"/><rect x="185" y="17.1" width="3" height="13.8"/><rect x="190" y="12.6" width="3" height="22.8"/><rect x="195" y="14.2" width="3" height="19.6"/><rect x="200" y="12.2" width="3" height="23.7"/><rect x="205" y="15.8" width="3" height="16.5"/><rect x="210" y="18.9" width="3" height="10.3"/><rect x="215" y="18.2" width="3" height="11.5"/><rect x="220" y="13.9" width="3" height="20.1"/><rect x="225" y="7.5" width="3" height="33.0"/><rect x="230" y="8.7" width="3" height="30.7"/><rect x="235" y="2.6" width="3" height="42.9"/><rect x="240" y="10.0" width="3" height="28.0"/><rect x="245" y="8.6" width="3" height="30.9"/><rect x="250" y="16.8" width="3" height="14.4"/><rect x="255" y="20.6" width="3" height="6.7"/><rect x="260" y="16.4" width="3" height="15.3"/><rect x="265" y="10.9" width="3" height="26.1"/><rect x="270" y="10.2" width="3" height="27.6"/><rect x="275" y="9.9" width="3" height="28.2"/><rect x="280" y="10.8" width="3" height="26.5"/><rect x="285" y="15.1" width="3" height="17.9"/><rect x="290" y="16.8" width="3" height="14.4"/><rect x="295" y="20.2" width="3" height="7.5"/><rect x="300" y="20.0" width="3" height="8.0"/><rect x="305" y="20.1" width="3" height="7.9"/><rect x="310" y="20.5" width="3" height="7.0"/><rect x="315" y="20.1" width="3" height="7.9"/><rect x="320" y="17.7" width="3" height="12.6"/><rect x="325" y="17.4" width="3" height="13.3"/><rect x="330" y="16.8" width="3" height="14.5"/><rect x="335" y="18.4" width="3" height="11.2"/><rect x="340" y="20.8" width="3" height="6.5"/><rect x="345" y="16.5" width="3" height="15.0"/><rect x="350" y="14.1" width="3" height="19.8"/><rect x="355" y="7.2" width="3" height="33.6"/><rect x="360" y="10.2" width="3" height="27.7"/><rect x="365" y="4.3" width="3" height="39.4"/><rect x="370" y="11.7" width="3" height="24.7"/><rect x="375" y="11.8" width="3" height="24.3"/><rect x="380" y="18.9" width="3" height="10.1"/><rect x="385" y="17.3" width="3" height="13.4"/><rect x="390" y="12.9" width="3" height="22.2"/><rect x="395" y="8.7" width="3" height="30.7"/><rect x="400" y="6.1" width="3" height="35.8"/><rect x="405" y="8.7" width="3" height="30.7"/><rect x="410" y="7.9" width="3" height="32.2"/><rect x="415" y="14.7" width="3" height="18.7"/><rect x="420" y="16.8" width="3" height="14.5"/><rect x="425" y="20.8" width="3" height="6.5"/><rect x="430" y="17.2" width="3" height="13.6"/><rect x="435" y="17.3" width="3" height="13.4"/><rect x="440" y="15.9" width="3" height="16.2"/><rect x="445" y="18.1" width="3" height="11.7"/><rect x="450" y="19.5" width="3" height="9.0"/><rect x="455" y="20.9" width="3" height="6.3"/><rect x="460" y="20.1" width="3" height="7.8"/><rect x="465" y="20.4" width="3" height="7.2"/><rect x="470" y="20.0" width="3" height="8.0"/><rect x="475" y="16.5" width="3" height="15.0"/></svg></div>
+  </div>
+  <span class="ksu-player__time">0:00 / -:--</span>
+  <a class="ksu-cta" data-ksu-player-link href="https://soundcloud.com/kseniya-podgornicz" target="_blank" rel="noopener">SoundCloud <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a>
+</div>
+
+<a class="ksu-cta ksu-cta--solid site-book" href="#booking" data-ksu-float=".site-booking__cta">Book KSU <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a>
+
+<div id="smooth-wrapper">
+<div id="smooth-content">
+<main class="ksu-page site-frame" id="top">
+
+  <header class="ksu-cover site-hero" data-ksu-cover>
+    <div class="ksu-cover__media ksu-photo-frame"><img class="ksu-photo" src="photos/hero.jpg" width="1600" height="2400" alt="KSU facing the camera in headphones, dark glasses and a black leather jacket, lit hard from one side" fetchpriority="high"></div>
+    <div class="ksu-cover__info">
+      <p class="ksu-eyebrow">International DJ portfolio • 2026</p>
+      <p class="ksu-cover__statement">Ukrainian DJ, event producer, founder &amp; resident of PROMIN'.</p>
+      <ul class="ksu-dots"><li>Techno</li><li>Melodic Techno</li><li>Indie Dance</li></ul>
+      <div class="ksu-cover__actions">
+        <a class="ksu-cta ksu-cta--solid ksu-cta--light ksu-cta--xl" href="#booking">Book KSU <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a>
+        <a class="ksu-cta" href="#mixes">Listen <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a>
+      </div>
+    </div>
+    <h1 class="ksu-cover__title">KSU</h1>
+    <p class="ksu-cover__title ksu-cover__title--outline" aria-hidden="true">KSU</p>
+  </header>
+
+  <section class="ksu-accent site-bleed site-mixes" id="mixes">
+    <div class="site-mixes__head">
+      <div><h2 class="ksu-mega" data-ksu-fit="0.9" data-ksu-reveal="chars">Mixes</h2></div>
+      <p class="ksu-eyebrow">DJ sets &amp; live performances<br>Press play to listen</p>
+    </div>
+    <ul class="ksu-mixes ksu-mixes--xl" data-ksu-enter="rows">
+      <li class="ksu-mix"><span class="ksu-mix__no">01</span><button class="ksu-play" type="button" data-ksu-track="https://soundcloud.com/kseniya-podgornicz/candy" aria-pressed="false" aria-label="Play Candy"><svg viewBox="0 0 10 10" aria-hidden="true"><path class="ksu-play__play" d="M1 0 10 5 1 10Z"/><path class="ksu-play__pause" d="M1 0H4V10H1ZM6 0H9V10H6Z"/></svg></button><div class="ksu-mix__body"><h3 class="ksu-mix__title">Candy</h3><p class="ksu-mix__meta">KSU b2b SUPRUN at PROMIN'</p></div><a class="ksu-cta" href="https://soundcloud.com/kseniya-podgornicz/candy" target="_blank" rel="noopener">SoundCloud <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a></li>
+      <li class="ksu-mix"><span class="ksu-mix__no">02</span><button class="ksu-play" type="button" data-ksu-track="https://soundcloud.com/kseniya-podgornicz/surrender" aria-pressed="false" aria-label="Play Surrender"><svg viewBox="0 0 10 10" aria-hidden="true"><path class="ksu-play__play" d="M1 0 10 5 1 10Z"/><path class="ksu-play__pause" d="M1 0H4V10H1ZM6 0H9V10H6Z"/></svg></button><div class="ksu-mix__body"><h3 class="ksu-mix__title">Surrender</h3><p class="ksu-mix__meta">Indie Dance • groovy &amp; sensual</p></div><a class="ksu-cta" href="https://soundcloud.com/kseniya-podgornicz/surrender" target="_blank" rel="noopener">SoundCloud <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a></li>
+      <li class="ksu-mix"><span class="ksu-mix__no">03</span><button class="ksu-play" type="button" data-ksu-track="https://soundcloud.com/kseniya-podgornicz/ksu-live-studio-mix-amman-27" aria-pressed="false" aria-label="Play Live studio mix - Amman"><svg viewBox="0 0 10 10" aria-hidden="true"><path class="ksu-play__play" d="M1 0 10 5 1 10Z"/><path class="ksu-play__pause" d="M1 0H4V10H1ZM6 0H9V10H6Z"/></svg></button><div class="ksu-mix__body"><h3 class="ksu-mix__title">Live studio mix - Amman</h3><p class="ksu-mix__meta">Live DJ mix</p></div><a class="ksu-cta" href="https://soundcloud.com/kseniya-podgornicz/ksu-live-studio-mix-amman-27" target="_blank" rel="noopener">SoundCloud <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a></li>
+      <li class="ksu-mix"><span class="ksu-mix__no">04</span><button class="ksu-play" type="button" data-ksu-track="https://soundcloud.com/kseniya-podgornicz/ksu-mind-game-techno-vol1-130-bpm-psy-techno-melodic-peak-time-hard-techno" aria-pressed="false" aria-label="Play Mind Game"><svg viewBox="0 0 10 10" aria-hidden="true"><path class="ksu-play__play" d="M1 0 10 5 1 10Z"/><path class="ksu-play__pause" d="M1 0H4V10H1ZM6 0H9V10H6Z"/></svg></button><div class="ksu-mix__body"><h3 class="ksu-mix__title">Mind Game</h3><p class="ksu-mix__meta">Techno • Psy Techno • Melodic • Peak Time • Hard Techno</p></div><a class="ksu-cta" href="https://soundcloud.com/kseniya-podgornicz/ksu-mind-game-techno-vol1-130-bpm-psy-techno-melodic-peak-time-hard-techno" target="_blank" rel="noopener">SoundCloud <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a></li>
+      <li class="ksu-mix"><span class="ksu-mix__no">05</span><button class="ksu-play" type="button" data-ksu-track="https://soundcloud.com/kseniya-podgornicz/ksu-kiki-vol1-techno-135-bpm-hard-techno-peak-time" aria-pressed="false" aria-label="Play Kiki"><svg viewBox="0 0 10 10" aria-hidden="true"><path class="ksu-play__play" d="M1 0 10 5 1 10Z"/><path class="ksu-play__pause" d="M1 0H4V10H1ZM6 0H9V10H6Z"/></svg></button><div class="ksu-mix__body"><h3 class="ksu-mix__title">Kiki</h3><p class="ksu-mix__meta">Techno • Hard Techno • Peak Time</p></div><a class="ksu-cta" href="https://soundcloud.com/kseniya-podgornicz/ksu-kiki-vol1-techno-135-bpm-hard-techno-peak-time" target="_blank" rel="noopener">SoundCloud <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a></li>
+      <li class="ksu-mix"><span class="ksu-mix__no">06</span><button class="ksu-play" type="button" data-ksu-track="https://soundcloud.com/kseniya-podgornicz/ksu-planet-vol1-psy-tech-peak-time-techno-minimal" aria-pressed="false" aria-label="Play Planet"><svg viewBox="0 0 10 10" aria-hidden="true"><path class="ksu-play__play" d="M1 0 10 5 1 10Z"/><path class="ksu-play__pause" d="M1 0H4V10H1ZM6 0H9V10H6Z"/></svg></button><div class="ksu-mix__body"><h3 class="ksu-mix__title">Planet</h3><p class="ksu-mix__meta">Psy Tech • Peak Time Techno • Minimal</p></div><a class="ksu-cta" href="https://soundcloud.com/kseniya-podgornicz/ksu-planet-vol1-psy-tech-peak-time-techno-minimal" target="_blank" rel="noopener">SoundCloud <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a></li>
+      <li class="ksu-mix"><span class="ksu-mix__no">07</span><button class="ksu-play" type="button" data-ksu-track="https://soundcloud.com/kseniya-podgornicz/ksu-live-at-the-roastery-260725" aria-pressed="false" aria-label="Play Live at The Roastery"><svg viewBox="0 0 10 10" aria-hidden="true"><path class="ksu-play__play" d="M1 0 10 5 1 10Z"/><path class="ksu-play__pause" d="M1 0H4V10H1ZM6 0H9V10H6Z"/></svg></button><div class="ksu-mix__body"><h3 class="ksu-mix__title">Live at The Roastery</h3><p class="ksu-mix__meta">Live DJ set</p></div><a class="ksu-cta" href="https://soundcloud.com/kseniya-podgornicz/ksu-live-at-the-roastery-260725" target="_blank" rel="noopener">SoundCloud <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a></li>
+      <li class="ksu-mix"><span class="ksu-mix__no">08</span><button class="ksu-play" type="button" data-ksu-track="https://soundcloud.com/kseniya-podgornicz/ksu-last-night-promin-210625-indie-dance-breakbeat-techno-melodic" aria-pressed="false" aria-label="Play Last Night - PROMIN'"><svg viewBox="0 0 10 10" aria-hidden="true"><path class="ksu-play__play" d="M1 0 10 5 1 10Z"/><path class="ksu-play__pause" d="M1 0H4V10H1ZM6 0H9V10H6Z"/></svg></button><div class="ksu-mix__body"><h3 class="ksu-mix__title">Last Night - PROMIN'</h3><p class="ksu-mix__meta">Indie Dance • Breakbeat • Techno • Melodic</p></div><a class="ksu-cta" href="https://soundcloud.com/kseniya-podgornicz/ksu-last-night-promin-210625-indie-dance-breakbeat-techno-melodic" target="_blank" rel="noopener">SoundCloud <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a></li>
+    </ul>
+  </section>
+
+  <section class="site-section site-watch" id="watch">
+    <h2 class="ksu-mega ksu-mega--over" data-ksu-fit="0.9" data-ksu-reveal="chars">Watch</h2>
+    <div class="site-watch__feature" data-ksu-enter="clip">
+      <figure class="ksu-video" data-ksu-video="qdItvtUhC_s">
+        <button class="ksu-video__cover" type="button" aria-label="Play video: Live at PROMIN' - Odesa"><img src="media/youtube/live-at-promin.jpg" width="1280" height="720" alt="KSU behind the decks at PROMIN', arm raised, in streaks of red light" loading="lazy"><span class="ksu-video__play"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 0 10 5 1 10Z"/></svg></span></button>
+        <figcaption class="ksu-video__cap"><span class="ksu-video__title">Live at PROMIN' - Odesa</span><span class="ksu-video__meta">Full set • 1:11:10 • Melodic &amp; peak time techno, bass house • 28.03.2026</span></figcaption>
+      </figure>
+    </div>
+    <div class="site-watch__row">
+      <div class="site-watch__copy">
+        <p class="ksu-bracket" data-ksu-reveal="scramble">Live sets <span class="ksu-bracket__gap"></span> /<br>DJ performances</p>
+        <a class="ksu-cta ksu-cta--accent" href="https://youtube.com/@dj_ksu" target="_blank" rel="noopener">Open YouTube <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a>
+      </div>
+      <div class="site-watch__short site-watch__short--a" data-speed="0.92"><figure class="ksu-video ksu-video--tall" data-ksu-video="dVHEY76ERCY">
+        <button class="ksu-video__cover" type="button" aria-label="Play video: Full set on the channel"><img src="media/youtube/short-full-set.jpg" width="1080" height="1920" alt="KSU dancing behind the decks under the Black Hall sign" loading="lazy"><span class="ksu-video__play"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 0 10 5 1 10Z"/></svg></span></button>
+        <figcaption class="ksu-video__cap"><span class="ksu-video__title">Full set on the channel</span><span class="ksu-video__meta">Short</span></figcaption>
+      </figure></div>
+      <div class="site-watch__short site-watch__short--b" data-speed="1.06"><figure class="ksu-video ksu-video--tall" data-ksu-video="A5jILCib7N0">
+        <button class="ksu-video__cover" type="button" aria-label="Play video: KSU live at PROMIN'"><img src="media/youtube/short-live-at-promin.jpg" width="1080" height="1920" alt="KSU with her arms raised at the decks in Black Hall" loading="lazy"><span class="ksu-video__play"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 0 10 5 1 10Z"/></svg></span></button>
+        <figcaption class="ksu-video__cap"><span class="ksu-video__title">KSU live at PROMIN'</span><span class="ksu-video__meta">Short • Odesa</span></figcaption>
+      </figure></div>
+    </div>
+  </section>
+
+  <section class="site-section site-live" id="live">
+    <h2 class="ksu-mega ksu-mega--over" data-ksu-fit="0.5" data-ksu-reveal="chars">Live</h2>
+    <div class="ksu-collage">
+      <div class="ksu-photo-frame site-live__a" data-ksu-enter="clip" data-ksu-parallax><img class="ksu-photo" src="photos/ksu-05.jpg" width="1086" height="1536" alt="KSU playing a sunset rooftop set in a white dress, the city behind her" loading="lazy"></div>
+      <div class="ksu-photo-frame site-live__b" data-ksu-enter="clip"><img class="ksu-photo" src="photos/press-controller-floor.jpg" width="1199" height="1800" alt="KSU sitting on the floor at a DJ controller, long braids and headphones" loading="lazy"></div>
+      <div class="ksu-photo-frame site-live__c" data-ksu-enter="clip"><img class="ksu-photo" src="photos/press-laughing.jpg" width="1199" height="1800" alt="KSU laughing with her hands on her headphones" loading="lazy"></div>
+      <div class="ksu-photo-frame site-live__d" data-ksu-enter="clip" data-ksu-parallax><img class="ksu-photo" src="photos/ksu-06.jpg" width="1440" height="835" alt="KSU laughing among dancers at a daytime rooftop party" loading="lazy"></div>
+      <p class="ksu-lead site-live__note" data-ksu-reveal="words">Her sets follow the energy of the crowd, creating a dynamic musical journey rather than a fixed format.</p>
+    </div>
+  </section>
+
+  <div class="ksu-marquee site-band" data-ksu-marquee aria-label="Techno, Melodic Techno, Indie Dance">
+    <ul class="ksu-marquee__track"><li>Techno</li><li>Melodic Techno</li><li>Indie Dance</li><li>Odesa, Ukraine</li><li aria-hidden="true">Techno</li><li aria-hidden="true">Melodic Techno</li><li aria-hidden="true">Indie Dance</li><li aria-hidden="true">Odesa, Ukraine</li></ul>
+  </div>
+
+  <section class="ksu-paper site-bleed site-profile" id="profile">
+    <div class="site-profile__top">
+      <div><h2 class="ksu-mega" data-ksu-fit="1" data-ksu-reveal="chars">Profile</h2></div>
+      <p class="ksu-eyebrow">Kseniia Podhornyts<br>DJ / Event producer<br>Odesa, Ukraine</p>
+    </div>
+    <div class="site-profile__body">
+      <div class="ksu-photo-frame site-profile__photo" data-ksu-enter="clip"><img class="ksu-photo" src="photos/profile.jpg" width="1067" height="1600" alt="KSU in a sculpted black dress and sheer gloves, looking away, under red light" loading="lazy"></div>
+      <div class="site-profile__text">
+        <p class="ksu-intro ksu-intro--xl" data-ksu-reveal="words">With performance experience across <em class="ksu-mark">Ukraine and Jordan</em>, KSU is available for international bookings, festivals, residencies, private events and long-term contracts worldwide.</p>
+        <dl class="ksu-spec" data-ksu-enter="rows">
+          <div><dt>Selected experience</dt><dd><b>PROMIN'</b><span>Founder &amp; resident DJ. Odesa, Ukraine - Multiple event concepts across rooftop, club and sunset formats.</span></dd></div>
+          <div><dt>Selected venues / events</dt><dd><p class="ksu-spec__run" style="margin:0">WOL.121 by Ribas <i>/</i> Black Hall <i>/</i> Park Residence <i>/</i> ROXY Party <i>/</i> The Roastery by Odesa <i>/</i> Grace <i>/</i> Rousseau's <i>/</i> Fanconi <i>/</i> Sorry Mom <i>/</i> Probka <i>/</i> Black Bar <i>/</i> Corvin Pub <i>/</i> Sheva <i>/</i> Peach Beach - Podilsk <i>/</i> Private &amp; city events - Odesa / Dnipro</p></dd></div>
+          <div><dt>International</dt><dd><b>Amman, Jordan</b><span>The Cellar Pub / Hamlets Pub / Club performances</span></dd></div>
+          <div><dt>Sound</dt><dd><span>Her core sound is rooted in Melodic Techno, Techno and Indie Dance, while her musical selection also extends to House, Progressive and other electronic genres.</span></dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="site-section site-media" id="media">
+    <div class="site-media__head">
+      <div><h2 class="ksu-mega" data-ksu-fit="0.62" data-ksu-reveal="chars">Press</h2></div>
+      <p class="ksu-eyebrow">Press materials / performance content<br>11 photographs</p>
+    </div>
+    <div class="ksu-rail site-bleed" data-ksu-rail>
+      <ul class="ksu-rail__track">
+        <li class="ksu-rail__item"><img src="photos/press-leather-profile.jpg" width="1200" height="1800" alt="KSU in profile wearing headphones and dark glasses" loading="lazy"></li>
+        <li class="ksu-rail__item"><img src="photos/press-controller-floor.jpg" width="1199" height="1800" alt="KSU sitting on the floor at a DJ controller, long braids and headphones" loading="lazy"></li>
+        <li class="ksu-rail__item"><img src="photos/press-silver-front.jpg" width="1200" height="1800" alt="KSU in a silver suit holding her headphone cable, braids over her shoulders" loading="lazy"></li>
+        <li class="ksu-rail__item"><img src="photos/press-crouch.jpg" width="1199" height="1800" alt="KSU crouching in a black leather jacket with headphones" loading="lazy"></li>
+        <li class="ksu-rail__item"><img src="photos/press-laughing.jpg" width="1199" height="1800" alt="KSU laughing with her hands on her headphones" loading="lazy"></li>
+        <li class="ksu-rail__item"><img src="photos/press-blue-light.jpg" width="1200" height="1800" alt="KSU in headphones and long braids under blue light" loading="lazy"></li>
+        <li class="ksu-rail__item"><img src="photos/press-controller-desk.jpg" width="1199" height="1800" alt="KSU leaning on a desk beside a DJ controller" loading="lazy"></li>
+        <li class="ksu-rail__item"><img src="photos/press-leather-front.jpg" width="1200" height="1800" alt="KSU facing the camera in headphones and a leather jacket" loading="lazy"></li>
+        <li class="ksu-rail__item"><img src="photos/press-silver-blue.jpg" width="1200" height="1800" alt="KSU in a silver suit and headphones under blue light" loading="lazy"></li>
+        <li class="ksu-rail__item"><img src="photos/press-reach.jpg" width="1200" height="1800" alt="KSU reaching toward the camera, seen from above" loading="lazy"></li>
+        <li class="ksu-rail__item"><img src="photos/press-leather-hands.jpg" width="1200" height="1800" alt="KSU with her hands crossed over a leather jacket" loading="lazy"></li>
+      </ul>
+    </div>
+    <ul class="ksu-mixes ksu-mixes--xl" data-ksu-enter="rows">
+      <li class="ksu-mix"><div class="ksu-mix__body"><h3 class="ksu-mix__title">Promo photos</h3><p class="ksu-mix__meta">Press / promo image library</p></div><a class="ksu-cta ksu-cta--accent" href="https://drive.google.com/drive/folders/1I-xpQfYDmVgYBjBEygbDZ727ejkSrsLe" target="_blank" rel="noopener">Open Google Drive <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a></li>
+      <li class="ksu-mix"><div class="ksu-mix__body"><h3 class="ksu-mix__title">KSU live videos</h3><p class="ksu-mix__meta">Live performance video library</p></div><a class="ksu-cta ksu-cta--accent" href="https://drive.google.com/drive/folders/10OTFLzyop0zAuHII6RB4_kW18DWjwxRI" target="_blank" rel="noopener">Open Google Drive <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a></li>
+    </ul>
+  </section>
+
+  <section class="site-section site-booking" id="booking">
+    <div class="site-booking__head">
+      <svg class="ksu-beat" viewBox="0 0 400 400" aria-hidden="true" data-ksu-beat><circle cx="200" cy="200" r="110"/></svg>
+      <p class="ksu-eyebrow">Available worldwide</p>
+      <h2 class="ksu-mega" data-ksu-fit="1" data-ksu-reveal="chars">Booking</h2>
+    </div>
+    <div class="site-booking__grid">
+      <div class="site-booking__text">
+        <p class="ksu-intro ksu-intro--xl" data-ksu-reveal="words">KSU is available for international bookings, festivals, residencies, private events and long-term contracts worldwide.</p>
+        <dl class="ksu-spec" data-ksu-enter="rows">
+          <div><dt>WhatsApp</dt><dd><a class="ksu-spec__val" href="https://wa.me/380635340657" target="_blank" rel="noopener">+380 63 534 06 57</a></dd></div>
+          <div><dt>Email</dt><dd><a class="ksu-spec__val" href="mailto:shcoda666kp@gmail.com">shcoda666kp@gmail.com</a></dd></div>
+          <div><dt>Instagram</dt><dd><a class="ksu-spec__val" href="https://www.instagram.com/ksu.muse" target="_blank" rel="noopener">@ksu.muse</a></dd></div>
+          <div><dt>YouTube</dt><dd><a class="ksu-spec__val" href="https://youtube.com/@dj_ksu" target="_blank" rel="noopener">@dj_ksu</a></dd></div>
+          <div><dt>Linktree</dt><dd><a class="ksu-spec__val" href="https://linktr.ee/djksu" target="_blank" rel="noopener">linktr.ee/djksu</a></dd></div>
+        </dl>
+      </div>
+      <div class="ksu-photo-frame site-booking__photo" data-ksu-enter="clip" data-ksu-parallax><img class="ksu-photo" src="photos/booking.jpg" width="1200" height="1800" alt="KSU resting on her arms, hands raised beside her face, wearing wide silver cuffs" loading="lazy"></div>
+    </div>
+    <a class="ksu-cta ksu-cta--solid ksu-cta--mega site-booking__cta" href="https://wa.me/380635340657" target="_blank" rel="noopener">Book KSU <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a>
+    <div class="site-booking__foot">
+      <p class="ksu-eyebrow">Clubs • Festivals • Residencies • Private Events • International Contracts</p>
+      <dl class="ksu-data ksu-data--stacked site-booking__details">
+        <div><dt>Height</dt><dd>168 cm</dd></div>
+        <div><dt>Nationality</dt><dd>Ukrainian</dd></div>
+        <div><dt>Languages</dt><dd>Ukrainian / Russian / English</dd></div>
+        <div><dt>Age</dt><dd>30</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <span>KSU - International DJ portfolio • 2026</span>
+    <span>Kseniia Podhornyts • Odesa, Ukraine</span>
+  </footer>
+
+</main>
+</div>
+</div>
+
+<script src="design-system/project/components/lib/gsap.min.js"></script>
+<script src="design-system/project/components/lib/ScrollTrigger.min.js"></script>
+<script src="design-system/project/components/lib/ScrollSmoother.min.js"></script>
+<script src="design-system/project/components/lib/SplitText.min.js"></script>
+<script src="design-system/project/components/bundle.js"></script>
+<script>KSU.ready();</script>
+</body>
+</html>

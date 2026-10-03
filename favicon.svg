@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>KSU</title>
+  <rect id="ground" width="32" height="32" fill="#f25940"/>
+  <circle id="ring" cx="16" cy="16" r="9" fill="none" stroke="#0d0d0d" stroke-width="2.5"/>
+  <circle id="core" cx="16" cy="16" r="2.5" fill="#0d0d0d"/>
+</svg>
