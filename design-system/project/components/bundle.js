@@ -5,7 +5,7 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.20.0', smoother: null };
+  var api = { version: '0.22.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
@@ -539,9 +539,29 @@
     // which follows the pointer and shows where a press would jump to, with the time at that point.
     var head = null, mark = null;
     if (track) {
-      head = document.createElement('span'); head.className = 'ksu-player__head';
+      head = document.createElement('span'); head.className = 'ksu-player__playhead';
       mark = document.createElement('span'); mark.className = 'ksu-player__seek'; mark.setAttribute('data-time', '');
       track.appendChild(head); track.appendChild(mark);
+    }
+    // While a mix plays, the bars of the waveform move: each one stretches and shrinks around its own height,
+    // on the half beat at 128 BPM, taking a new random size every time. They settle back when it pauses.
+    var moving = null;
+    function dance(playing) {
+      if (!on || !bars.length) return;
+      if (playing) {
+        if (!moving) {
+          moving = gsap.to(bars, {
+            scaleY: function () { return gsap.utils.random(0.45, 1.7); },
+            duration: 60 / 128 / 2, ease: 'sine.inOut', yoyo: true, repeat: -1, repeatRefresh: true,
+            stagger: { each: 0.004, from: 'random' }, transformOrigin: '50% 50%'
+          });
+        }
+        moving.play();
+      } else if (moving) {
+        moving.kill();
+        moving = null;
+        gsap.to(bars, { scaleY: 1, duration: 0.3, ease: 'power2.out', overwrite: true });
+      }
     }
     function clock(ms) {
       var s = Math.max(0, Math.floor(ms / 1000)), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), r = s % 60;
@@ -552,11 +572,7 @@
       if (time) time.textContent = clock(pos) + ' / ' + (duration ? clock(duration) : '-:--');
       if (track) track.setAttribute('aria-valuenow', Math.round(rel * 100));
       bars.forEach(function (b, n) { b.classList.toggle('is-on', n / bars.length < rel); });
-      if (head) {
-        head.style.left = (rel * 100).toFixed(2) + '%';
-        // Hidden while it would sit on the very first bar, where it reads as a stray line.
-        head.classList.toggle('is-on', rel > 0.004);
-      }
+      if (head) head.style.left = (rel * 100).toFixed(2) + '%';
     }
     function state(playing) {
       buttons.forEach(function (b) {
@@ -566,6 +582,7 @@
         if (row) row.classList.toggle('is-playing', onNow);
       });
       api.playing = playing;
+      dance(playing);
       if (toggle) toggle.setAttribute('aria-pressed', playing ? 'true' : 'false');
       if (eq) { if (playing) eq.play(); else eq.pause(); }
     }
