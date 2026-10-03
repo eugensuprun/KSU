@@ -5,7 +5,7 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.12.0', smoother: null };
+  var api = { version: '0.13.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
@@ -259,6 +259,12 @@
       return { wait: 0, handoff: true };
     }
     if (name) gsap.set(name, { autoAlpha: 1 });
+    // The letters come up a little from below, one after another, as the fill begins.
+    if (Split) {
+      [ghost, fill].forEach(function (layer) {
+        if (layer) tl.from(Split.create(layer, { type: 'chars' }).chars, { yPercent: 35, autoAlpha: 0, duration: 0.8, ease: 'expo.out', stagger: 0.1 }, 0);
+      });
+    }
     if (fill) tl.fromTo(fill, { clipPath: 'inset(-10% 100% -10% 0%)' }, { clipPath: 'inset(-10% 0% -10% 0%)', duration: 1.4, ease: 'power2.inOut' }, 0);
     if (ghost) tl.set(ghost, { autoAlpha: 0 }, 1.4);
     if (name) tl.to(name, { yPercent: -30, autoAlpha: 0, duration: 0.5, ease: 'power2.in' }, 1.5);
@@ -316,6 +322,12 @@
       if (frame) gsap.set(frame, { clipPath: 'inset(100% 0% 0% 0%)' });
       if (info) gsap.set(info.children, { autoAlpha: 0, y: 24 });
       if (outline) outline.style.clipPath = 'inset(-10% 0px -10% 0px)';
+      // The letters come up a little from below, one after another, as the fill begins.
+      if (Split) {
+        titles.forEach(function (t) {
+          intro.from(Split.create(t, { type: 'chars' }).chars, { yPercent: 35, autoAlpha: 0, duration: 0.8, ease: 'expo.out', stagger: 0.1 }, 0);
+        });
+      }
       intro.fromTo(solid, { clipPath: 'inset(-10% 100% -10% 0%)' }, { clipPath: 'inset(-10% 0% -10% 0%)', duration: 1.4, ease: 'power2.inOut', clearProps: 'clipPath' }, 0);
       if (outline) intro.call(function () { outline.style.clipPath = cut; }, null, 1.42);
       if (frame) intro.to(frame, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.5, ease: 'expo.inOut', clearProps: 'clipPath' }, 1.3);
