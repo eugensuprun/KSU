@@ -436,13 +436,12 @@ a:hover > .ksu-badge, a:focus-visible > .ksu-badge { color: var(--ink); }
 .ksu-curtain__bars { position: absolute; inset: 0; display: flex; }
 .ksu-curtain__bars i { flex: 1; margin-right: -1px; background: var(--bg-page); }
 .ksu-curtain__top { position: absolute; top: var(--space-8); left: var(--space-8); right: var(--space-8); display: flex; justify-content: space-between; gap: var(--space-6); color: var(--ink-muted); font: 400 12px/17px var(--font-mono); font-variant-numeric: tabular-nums; text-transform: uppercase; }
-.ksu-curtain__name { visibility: hidden; position: absolute; left: var(--space-8); top: 50%; translate: 0 -50%; font: 500 30vw / 0.74 var(--font-heading); letter-spacing: -0.03em; text-transform: uppercase; white-space: nowrap; }
+.ksu-curtain__name { visibility: hidden; position: absolute; left: 50%; top: 50%; translate: -50% -50%; font: 500 30vw / 0.74 var(--font-heading); letter-spacing: -0.03em; text-transform: uppercase; white-space: nowrap; }
 .ksu-curtain__name span { display: block; width: max-content; }
 .ksu-curtain__ghost { color: transparent; -webkit-text-stroke: 1.5px var(--ink-ghost); }
 .ksu-curtain__fill { position: absolute; left: 0; top: 0; color: var(--accent); clip-path: inset(-10% 100% -10% 0); }
 @media (max-width: 720px) {
   .ksu-curtain__top { left: var(--space-4); right: var(--space-4); }
-  .ksu-curtain__name { left: var(--space-4); }
 }
 
 /* Cover: the image-led hero. A tall photograph on the right, the name across the bottom: solid beside the photo, outlined over it. */
