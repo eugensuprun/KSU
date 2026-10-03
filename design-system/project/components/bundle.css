@@ -243,7 +243,18 @@
 .ksu-play__pause, .ksu-play[aria-pressed="true"] .ksu-play__play { display: none; }
 .ksu-play[aria-pressed="true"] .ksu-play__pause { display: block; }
 .ksu-play:hover, .ksu-play[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
-.ksu-play:focus-visible, .ksu-player__progress:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.ksu-play:focus-visible, .ksu-player__progress:focus-visible, .ksu-player__close:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+/* Loading: three bars in place of the play mark until the mix actually starts */
+.ksu-play__loader { display: none; align-items: flex-end; gap: 3px; height: 14px; }
+.ksu-play__loader i { width: 3px; height: 100%; background: currentColor; transform-origin: 50% 100%; }
+.ksu-play.is-loading svg { display: none; }
+.ksu-play.is-loading .ksu-play__loader { display: flex; }
+.ksu-mixes--xl .ksu-play__loader { height: 18px; gap: 4px; }
+.ksu-mixes--xl .ksu-play__loader i { width: 4px; }
+/* Close: puts the player bar away */
+.ksu-player__close { display: grid; place-items: center; flex: none; width: 40px; height: 40px; padding: 0; border: 0; background: none; color: var(--ink-muted); cursor: pointer; transition: color var(--ksu-hover); }
+.ksu-player__close:hover { color: var(--ink); }
+.ksu-player__close svg { width: 16px; height: 16px; }
 .ksu-mix.is-playing .ksu-mix__title { color: var(--accent); }
 .ksu-player {
   position: fixed;

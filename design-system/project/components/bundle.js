@@ -5,7 +5,7 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.14.0', smoother: null };
+  var api = { version: '0.15.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
@@ -556,17 +556,58 @@
       if (toggle) toggle.setAttribute('aria-pressed', playing ? 'true' : 'false');
       if (eq) { if (playing) eq.play(); else eq.pause(); }
     }
+    // Loading: from the press until SoundCloud actually starts the mix, the button shows three moving bars
+    // and the waveform shimmers, so the visitor knows something is happening.
+    var loadingOn = null, shimmer = null, closeBtn = q('[data-ksu-player-close]');
+    function loader(host) {
+      var box = host.querySelector('.ksu-play__loader');
+      if (!box) {
+        box = document.createElement('span');
+        box.className = 'ksu-play__loader';
+        box.innerHTML = '<i></i><i></i><i></i>';
+        host.appendChild(box);
+      }
+      return box;
+    }
+    function loading(btn) {
+      [loadingOn, toggle].forEach(function (b) {
+        if (!b) return;
+        b.classList.remove('is-loading');
+        if (has) gsap.killTweensOf(b.querySelectorAll('.ksu-play__loader i'));
+      });
+      if (shimmer) { shimmer.kill(); shimmer = null; if (has) gsap.set(bars, { clearProps: 'opacity' }); }
+      loadingOn = btn || null;
+      if (!btn) return;
+      [btn, toggle].forEach(function (b) {
+        if (!b) return;
+        b.classList.add('is-loading');
+        var parts = loader(b).querySelectorAll('i');
+        if (on) gsap.fromTo(parts, { scaleY: 0.25 }, { scaleY: 1, duration: 0.35, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: 0.12 });
+      });
+      if (on && bars.length) shimmer = gsap.fromTo(bars, { opacity: 1 }, { opacity: 0.3, duration: 0.5, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: { each: 0.015 } });
+      if (time) time.textContent = 'Loading';
+    }
+    // Closing the bar stops the mix and puts the bar away; pressing a mix again brings it back.
+    function close() {
+      if (widget) widget.pause();
+      loading(null);
+      state(false);
+      if (!bar || bar.hidden) return;
+      if (on) gsap.to(bar, { yPercent: 100, duration: 0.4, ease: 'power2.in', onComplete: function () { bar.hidden = true; gsap.set(bar, { clearProps: 'transform' }); } });
+      else bar.hidden = true;
+    }
     function show(btn) {
       var row = btn.closest('.ksu-mix'), name = row && row.querySelector('.ksu-mix__title');
       if (title) title.textContent = name ? name.textContent : '';
       if (link) link.href = btn.getAttribute('data-ksu-track');
       if (bar && bar.hidden) {
         bar.hidden = false;
-        if (on) gsap.from(bar, { yPercent: 100, duration: 0.6 });
+        if (on) gsap.fromTo(bar, { yPercent: 100 }, { yPercent: 0, duration: 0.6 });
       }
-      paint(0, 0);
+      if (btn !== current || !duration) paint(0, 0);
     }
     function fail() {
+      loading(null);
       state(false);
       if (title) title.textContent = 'Playback is unavailable here. Open the mix on SoundCloud.';
     }
@@ -574,7 +615,7 @@
     function bind() {
       var E = window.SC.Widget.Events;
       widget.bind(E.READY, function () { measure(); widget.play(); });
-      widget.bind(E.PLAY, function () { measure(); state(true); });
+      widget.bind(E.PLAY, function () { measure(); loading(null); state(true); });
       widget.bind(E.PAUSE, function () { state(false); });
       widget.bind(E.PLAY_PROGRESS, function (e) { paint(e.relativePosition, e.currentPosition); });
       widget.bind(E.FINISH, function () {
@@ -587,9 +628,14 @@
     function start(btn) {
       var url = btn.getAttribute('data-ksu-track');
       stopVideos();
-      if (btn === current && widget) { widget.toggle(); return; }
+      if (btn === current && widget) {
+        if (bar && bar.hidden) show(btn);
+        widget.toggle();
+        return;
+      }
       current = btn; duration = 0;
       show(btn);
+      loading(btn);
       if (widget) { widget.load(url, { auto_play: true, show_artwork: false, callback: measure }); return; }
       var frame = document.createElement('iframe');
       frame.className = 'ksu-player__frame';
@@ -609,6 +655,7 @@
     api.pauseAudio = function () { if (widget) widget.pause(); };
     buttons.forEach(function (b) { b.addEventListener('click', function () { start(b); }); });
     if (toggle) toggle.addEventListener('click', function () { if (widget) widget.toggle(); });
+    if (closeBtn) closeBtn.addEventListener('click', close);
     if (track) {
       track.addEventListener('click', function (e) {
         var box = track.getBoundingClientRect();
