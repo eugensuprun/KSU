@@ -5,7 +5,7 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.11.0', smoother: null };
+  var api = { version: '0.12.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
@@ -611,6 +611,20 @@
     }
   }
 
+  // Make the whole of a list row act as its control: pressing the title or the empty space plays the mix,
+  // or opens the row's link when it has no play button. Presses on a link or button inside the row keep their own meaning.
+  function rowActions() {
+    all('.ksu-mix').forEach(function (row) {
+      var control = row.querySelector('.ksu-play') || row.querySelector('a.ksu-cta');
+      if (!control) return;
+      row.classList.add('ksu-mix--action');
+      row.addEventListener('click', function (e) {
+        if (e.target.closest('a, button')) return;
+        control.click();
+      });
+    });
+  }
+
   // Wire up everything in the document by attribute. Call once, after fonts have loaded (KSU.ready does that).
   function init(opts) {
     opts = opts || {};
@@ -635,6 +649,7 @@
     all('[data-ksu-pin]').forEach(pin);
     all('[data-ksu-marquee]').forEach(marquee);
     player();
+    rowActions();
     if (!all('[data-ksu-hero], [data-ksu-cover]').length) shown();
     if (has) ST.refresh();
   }

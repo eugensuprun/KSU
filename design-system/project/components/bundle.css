@@ -222,6 +222,7 @@
 }
 .ksu-mix__meta { margin: var(--space-1) 0 0; color: var(--ink-muted); font: 400 15px/20px var(--font-sans); letter-spacing: -0.01em; }
 .ksu-mix:hover .ksu-mix__title { color: var(--accent); }
+.ksu-mix--action { cursor: pointer; }
 
 /* MixPlayer: play buttons in mix rows and the fixed now-playing bar */
 .ksu-play {
