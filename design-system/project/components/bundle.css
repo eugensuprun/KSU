@@ -421,7 +421,15 @@ a:hover > .ksu-badge, a:focus-visible > .ksu-badge { color: var(--ink); }
 /* Waveform: 96 bars; in the player, bars up to the playhead turn accent */
 .ksu-wave { display: block; width: 100%; height: 32px; }
 .ksu-wave rect { fill: var(--ink-ghost); transition: fill var(--ksu-hover); }
+.ksu-wave rect.is-hover { fill: var(--ink-muted); }
 .ksu-wave rect.is-on { fill: var(--accent); }
+/* Playhead: where the mix is now. Seek marker: where a press would jump to, with the time there. */
+.ksu-player__head, .ksu-player__seek { position: absolute; top: -6px; bottom: -6px; width: 2px; margin-left: -1px; pointer-events: none; }
+.ksu-player__head { background: var(--ink); }
+.ksu-player__seek { background: var(--ink-muted); opacity: 0; }
+.ksu-player__progress.is-hover .ksu-player__seek { opacity: 1; }
+.ksu-player__seek::after { content: attr(data-time); position: absolute; left: 50%; bottom: 100%; padding: 2px 6px; background: var(--ink); color: var(--on-accent); font: 400 11px/15px var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; translate: -50% -4px; }
+.ksu-player__seek[data-time=""]::after { display: none; }
 
 /* Equaliser: three bars that move while a mix plays */
 .ksu-eq { width: 12px; height: 12px; flex: none; fill: var(--accent); }

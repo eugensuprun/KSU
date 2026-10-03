@@ -5,7 +5,7 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.15.0', smoother: null };
+  var api = { version: '0.16.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
@@ -535,6 +535,14 @@
     var bars = track ? all('.ksu-wave rect', track) : [];
     var eq = bar && on ? gsap.to(all('.ksu-eq rect', bar), { scaleY: 0.25, duration: 0.3, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: 0.12, paused: true }) : null;
 
+    // Two markers on the waveform: the playhead, which shows where the mix is now, and the seek marker,
+    // which follows the pointer and shows where a press would jump to, with the time at that point.
+    var head = null, mark = null;
+    if (track) {
+      head = document.createElement('span'); head.className = 'ksu-player__head';
+      mark = document.createElement('span'); mark.className = 'ksu-player__seek'; mark.setAttribute('data-time', '');
+      track.appendChild(head); track.appendChild(mark);
+    }
     function clock(ms) {
       var s = Math.max(0, Math.floor(ms / 1000)), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), r = s % 60;
       return (h ? h + ':' + (m < 10 ? '0' : '') : '') + m + ':' + (r < 10 ? '0' : '') + r;
@@ -544,6 +552,7 @@
       if (time) time.textContent = clock(pos) + ' / ' + (duration ? clock(duration) : '-:--');
       if (track) track.setAttribute('aria-valuenow', Math.round(rel * 100));
       bars.forEach(function (b, n) { b.classList.toggle('is-on', n / bars.length < rel); });
+      if (head) head.style.left = (rel * 100).toFixed(2) + '%';
     }
     function state(playing) {
       buttons.forEach(function (b) {
@@ -657,6 +666,18 @@
     if (toggle) toggle.addEventListener('click', function () { if (widget) widget.toggle(); });
     if (closeBtn) closeBtn.addEventListener('click', close);
     if (track) {
+      track.addEventListener('pointermove', function (e) {
+        var box = track.getBoundingClientRect();
+        var rel = Math.max(0, Math.min(1, (e.clientX - box.left) / box.width));
+        track.classList.add('is-hover');
+        mark.style.left = (rel * 100).toFixed(2) + '%';
+        mark.setAttribute('data-time', duration ? clock(rel * duration) : '');
+        bars.forEach(function (b, n) { b.classList.toggle('is-hover', n / bars.length < rel); });
+      });
+      track.addEventListener('pointerleave', function () {
+        track.classList.remove('is-hover');
+        bars.forEach(function (b) { b.classList.remove('is-hover'); });
+      });
       track.addEventListener('click', function (e) {
         var box = track.getBoundingClientRect();
         seek((e.clientX - box.left) / box.width);
