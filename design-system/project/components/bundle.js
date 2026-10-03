@@ -5,7 +5,7 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.16.0', smoother: null };
+  var api = { version: '0.20.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
@@ -552,7 +552,11 @@
       if (time) time.textContent = clock(pos) + ' / ' + (duration ? clock(duration) : '-:--');
       if (track) track.setAttribute('aria-valuenow', Math.round(rel * 100));
       bars.forEach(function (b, n) { b.classList.toggle('is-on', n / bars.length < rel); });
-      if (head) head.style.left = (rel * 100).toFixed(2) + '%';
+      if (head) {
+        head.style.left = (rel * 100).toFixed(2) + '%';
+        // Hidden while it would sit on the very first bar, where it reads as a stray line.
+        head.classList.toggle('is-on', rel > 0.004);
+      }
     }
     function state(playing) {
       buttons.forEach(function (b) {
@@ -565,53 +569,45 @@
       if (toggle) toggle.setAttribute('aria-pressed', playing ? 'true' : 'false');
       if (eq) { if (playing) eq.play(); else eq.pause(); }
     }
-    // Loading: from the press until SoundCloud actually starts the mix, the button shows three moving bars
-    // and the waveform shimmers, so the visitor knows something is happening.
-    var loadingOn = null, shimmer = null, closeBtn = q('[data-ksu-player-close]');
-    function loader(host) {
-      var box = host.querySelector('.ksu-play__loader');
-      if (!box) {
-        box = document.createElement('span');
-        box.className = 'ksu-play__loader';
-        box.innerHTML = '<i></i><i></i><i></i>';
-        host.appendChild(box);
-      }
-      return box;
-    }
+    // Loading: from the press until SoundCloud actually starts the mix, the waveform in the bar shimmers. Nothing else changes.
+    var shimmer = null, closeBtn = q('[data-ksu-player-close]');
     function loading(btn) {
-      [loadingOn, toggle].forEach(function (b) {
-        if (!b) return;
-        b.classList.remove('is-loading');
-        if (has) gsap.killTweensOf(b.querySelectorAll('.ksu-play__loader i'));
-      });
       if (shimmer) { shimmer.kill(); shimmer = null; if (has) gsap.set(bars, { clearProps: 'opacity' }); }
-      loadingOn = btn || null;
       if (!btn) return;
-      [btn, toggle].forEach(function (b) {
-        if (!b) return;
-        b.classList.add('is-loading');
-        var parts = loader(b).querySelectorAll('i');
-        if (on) gsap.fromTo(parts, { scaleY: 0.25 }, { scaleY: 1, duration: 0.35, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: 0.12 });
-      });
       if (on && bars.length) shimmer = gsap.fromTo(bars, { opacity: 1 }, { opacity: 0.3, duration: 0.5, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: { each: 0.015 } });
-      if (time) time.textContent = 'Loading';
     }
     // Closing the bar stops the mix and puts the bar away; pressing a mix again brings it back.
+    // Tell the page how tall the bar is, so anything fixed above it (the booking button) can keep clear of it.
+    var closing = false;
+    function room() {
+      var h = bar && !bar.hidden && !closing ? bar.offsetHeight : 0;
+      document.documentElement.style.setProperty('--ksu-player-h', h + 'px');
+    }
+    window.addEventListener('resize', room);
     function close() {
+      wanted = false;
       if (widget) widget.pause();
       loading(null);
       state(false);
       if (!bar || bar.hidden) return;
-      if (on) gsap.to(bar, { yPercent: 100, duration: 0.4, ease: 'power2.in', onComplete: function () { bar.hidden = true; gsap.set(bar, { clearProps: 'transform' }); } });
-      else bar.hidden = true;
+      closing = true;
+      room();
+      if (on) gsap.to(bar, { yPercent: 100, duration: 0.4, ease: 'power2.in', onComplete: function () { bar.hidden = true; closing = false; gsap.set(bar, { clearProps: 'transform' }); } });
+      else { bar.hidden = true; closing = false; }
     }
     function show(btn) {
       var row = btn.closest('.ksu-mix'), name = row && row.querySelector('.ksu-mix__title');
       if (title) title.textContent = name ? name.textContent : '';
       if (link) link.href = btn.getAttribute('data-ksu-track');
-      if (bar && bar.hidden) {
+      if (bar) {
+        // Cancel a close that is still sliding the bar away, then bring it in.
+        var wasHidden = bar.hidden || closing;
+        if (has) gsap.killTweensOf(bar);
+        closing = false;
         bar.hidden = false;
-        if (on) gsap.fromTo(bar, { yPercent: 100 }, { yPercent: 0, duration: 0.6 });
+        if (wasHidden && on) gsap.fromTo(bar, { yPercent: 100 }, { yPercent: 0, duration: 0.6 });
+        else if (has) gsap.set(bar, { yPercent: 0 });
+        room();
       }
       if (btn !== current || !duration) paint(0, 0);
     }
@@ -621,12 +617,43 @@
       if (title) title.textContent = 'Playback is unavailable here. Open the mix on SoundCloud.';
     }
     function measure() { widget.getDuration(function (d) { duration = d; }); }
+    // Switching mixes: the player is told to load the new one and then explicitly to play it, and is checked twice afterwards.
+    // If a press arrives while the player is still starting up or loading, the latest press wins.
+    var frame = null, ready = false, pending = null, loaded = null, wanted = false, checks = [];
+    function watch(url) {
+      checks.forEach(clearTimeout);
+      checks = [1500, 4000].map(function (ms) {
+        return setTimeout(function () {
+          if (!wanted || loaded !== url) return;
+          widget.isPaused(function (paused) { if (paused && wanted && loaded === url) widget.play(); });
+        }, ms);
+      });
+    }
+    function load(url) {
+      loaded = url;
+      widget.load(url, { auto_play: true, show_artwork: false, callback: function () {
+        if (pending && pending !== url) { var next = pending; pending = null; load(next); return; }
+        pending = null;
+        measure();
+        widget.play();
+        watch(url);
+      } });
+    }
     function bind() {
       var E = window.SC.Widget.Events;
-      widget.bind(E.READY, function () { measure(); widget.play(); });
+      widget.bind(E.READY, function () {
+        if (ready) return;
+        ready = true;
+        if (pending && pending !== loaded) { var next = pending; pending = null; load(next); return; }
+        pending = null;
+        measure();
+        widget.play();
+        watch(loaded);
+      });
       widget.bind(E.PLAY, function () { measure(); loading(null); state(true); });
       widget.bind(E.PAUSE, function () { state(false); });
       widget.bind(E.PLAY_PROGRESS, function (e) { paint(e.relativePosition, e.currentPosition); });
+      widget.bind(E.SEEK, function (e) { paint(e.relativePosition, e.currentPosition); });
       widget.bind(E.FINISH, function () {
         state(false);
         var next = buttons[buttons.indexOf(current) + 1];
@@ -637,33 +664,45 @@
     function start(btn) {
       var url = btn.getAttribute('data-ksu-track');
       stopVideos();
-      if (btn === current && widget) {
+      if (btn === current && widget && ready && loaded === url && !pending) {
         if (bar && bar.hidden) show(btn);
-        widget.toggle();
+        widget.isPaused(function (paused) { wanted = paused; widget.toggle(); });
         return;
       }
-      current = btn; duration = 0;
+      current = btn; duration = 0; wanted = true;
+      state(false);
       show(btn);
       loading(btn);
-      if (widget) { widget.load(url, { auto_play: true, show_artwork: false, callback: measure }); return; }
-      var frame = document.createElement('iframe');
+      if (widget && ready) { pending = null; load(url); return; }
+      pending = url;
+      if (frame) return;
+      loaded = url;
+      frame = document.createElement('iframe');
       frame.className = 'ksu-player__frame';
       frame.allow = 'autoplay';
       frame.title = 'SoundCloud player';
       frame.tabIndex = -1;
       frame.src = 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(url) + '&auto_play=true&show_artwork=false&visual=false';
       document.body.appendChild(frame);
-      var api = document.createElement('script');
-      api.src = 'https://w.soundcloud.com/player/api.js';
-      api.onload = function () { widget = window.SC.Widget(frame); bind(); };
-      api.onerror = fail;
-      document.head.appendChild(api);
+      var script = document.createElement('script');
+      script.src = 'https://w.soundcloud.com/player/api.js';
+      script.onload = function () { widget = window.SC.Widget(frame); bind(); };
+      script.onerror = fail;
+      document.head.appendChild(script);
     }
-    function seek(rel) { if (widget && duration) widget.seekTo(Math.max(0, Math.min(1, rel)) * duration); }
+    // Jump, and move the playhead at once rather than waiting for the player to report back.
+    function seek(rel) {
+      if (!widget || !duration) return;
+      rel = Math.max(0, Math.min(1, rel));
+      widget.seekTo(rel * duration);
+      paint(rel, rel * duration);
+    }
 
-    api.pauseAudio = function () { if (widget) widget.pause(); };
+    api.pauseAudio = function () { wanted = false; if (widget) widget.pause(); };
     buttons.forEach(function (b) { b.addEventListener('click', function () { start(b); }); });
-    if (toggle) toggle.addEventListener('click', function () { if (widget) widget.toggle(); });
+    if (toggle) toggle.addEventListener('click', function () {
+      if (widget) widget.isPaused(function (paused) { wanted = paused; widget.toggle(); });
+    });
     if (closeBtn) closeBtn.addEventListener('click', close);
     if (track) {
       track.addEventListener('pointermove', function (e) {
