@@ -5,7 +5,7 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.32.0', smoother: null };
+  var api = { version: '0.33.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
@@ -64,6 +64,19 @@
       f.src = el.getAttribute('data-ksu-video-from') === 'tiktok'
         ? 'https://www.tiktok.com/player/v1/' + id + '?autoplay=1&rel=0&description=0&music_info=0'
         : 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1';
+      // TikTok's player starts silent. The press on the cover is the visitor asking for the video, so once the player
+      // reports ready (and again when it first plays) it is told to unmute and play.
+      if (el.getAttribute('data-ksu-video-from') === 'tiktok') {
+        var say = function (type) { if (f.contentWindow) f.contentWindow.postMessage({ type: type, 'x-tiktok-player': true }, 'https://www.tiktok.com'); };
+        var tries = 0;
+        var hear = function (e) {
+          if (e.source !== f.contentWindow || !e.data || !e.data['x-tiktok-player']) return;
+          if (!f.isConnected) { window.removeEventListener('message', hear); return; }
+          if (e.data.type === 'onPlayerReady' || (e.data.type === 'onStateChange' && tries < 3)) { tries++; say('unMute'); say('play'); }
+          if (e.data.type === 'onMute' && tries < 3) { tries++; say('unMute'); }
+        };
+        window.addEventListener('message', hear);
+      }
       var holder = document.createElement('div');
       holder.className = cover.className;
       holder.style.cursor = 'auto';
