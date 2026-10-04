@@ -6,9 +6,8 @@
 <title>KSU - DJ / Event Producer</title>
 <meta name="description" content="KSU is a Ukrainian DJ and event producer from Odesa. Techno, Melodic Techno, Indie Dance. Available worldwide for clubs, festivals, residencies and private events.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="design-system/tokens.css">
-<link rel="stylesheet" href="design-system/project/components/bundle.css">
-<link rel="stylesheet" href="site.css">
+<link rel="preload" as="image" href="photos/hero.webp" imagesrcset="photos/hero-800.webp 800w, photos/hero.webp 1333w" imagesizes="(max-width: 720px) 100vw, 58vw" fetchpriority="high">
+<link rel="stylesheet" href="ksu.css?v=1204601f">
 <script>
   // Hide the hero until its intro starts; give up after 3s so the page is never left blank.
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -46,7 +45,7 @@
 <main class="ksu-page site-frame" id="top">
 
   <header class="ksu-cover site-hero" data-ksu-cover>
-    <div class="ksu-cover__media ksu-photo-frame"><img class="ksu-photo" src="photos/hero.jpg" width="1600" height="2400" alt="KSU facing the camera in headphones, dark glasses and a black leather jacket, lit hard from one side" fetchpriority="high"></div>
+    <div class="ksu-cover__media ksu-photo-frame"><img class="ksu-photo" src="photos/hero.webp" srcset="photos/hero-800.webp 800w, photos/hero.webp 1333w" sizes="(max-width: 720px) 100vw, 58vw" width="1600" height="2400" alt="KSU facing the camera in headphones, dark glasses and a black leather jacket, lit hard from one side" fetchpriority="high"></div>
     <div class="ksu-cover__info">
       <p class="ksu-eyebrow">International DJ portfolio</p>
       <p class="ksu-cover__statement">Ukrainian DJ, event producer, founder &amp; resident of PROMIN'.</p>
@@ -81,7 +80,7 @@
     <h2 class="ksu-mega ksu-mega--over" data-ksu-fit="0.9" data-ksu-reveal="chars">Watch</h2>
     <div class="site-watch__feature" data-ksu-enter="clip">
       <figure class="ksu-video" data-ksu-video="qdItvtUhC_s">
-        <button class="ksu-video__cover" type="button" aria-label="Play video: Live at PROMIN' - Odesa"><img src="media/youtube/live-at-promin.jpg" width="1280" height="720" alt="KSU behind the decks at PROMIN', arm raised, in streaks of red light" loading="lazy"><span class="ksu-video__play"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 0 10 5 1 10Z"/></svg></span></button>
+        <button class="ksu-video__cover" type="button" aria-label="Play video: Live at PROMIN' - Odesa"><img src="media/youtube/live-at-promin.webp" width="1280" height="720" alt="KSU behind the decks at PROMIN', arm raised, in streaks of red light" loading="lazy" decoding="async"><span class="ksu-video__play"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 0 10 5 1 10Z"/></svg></span></button>
         <figcaption class="ksu-video__cap"><span class="ksu-video__title">Live at PROMIN' - Odesa</span><span class="ksu-video__meta">Full set • 1:11:10 • Melodic &amp; peak time techno, bass house • 28.03.2026</span></figcaption>
       </figure>
     </div>
@@ -91,11 +90,11 @@
         <a class="ksu-cta ksu-cta--accent" href="https://youtube.com/@dj_ksu" target="_blank" rel="noopener">Open YouTube <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a>
       </div>
       <div class="site-watch__short site-watch__short--a" data-speed="0.92"><figure class="ksu-video ksu-video--tall" data-ksu-video="7519193368950213893" data-ksu-video-from="tiktok">
-        <button class="ksu-video__cover" type="button" aria-label="Play video: PROMIN' rooftop - Odesa"><img src="media/tiktok/sunset-at-promin.jpg" width="720" height="1280" alt="KSU at the decks on a rooftop at dusk, in lace gloves and pearl earrings, eyes closed, with the city behind her" loading="lazy"><span class="ksu-video__play"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 0 10 5 1 10Z"/></svg></span></button>
+        <button class="ksu-video__cover" type="button" aria-label="Play video: PROMIN' rooftop - Odesa"><img src="media/tiktok/sunset-at-promin.webp" width="720" height="1280" alt="KSU at the decks on a rooftop at dusk, in lace gloves and pearl earrings, eyes closed, with the city behind her" loading="lazy" decoding="async"><span class="ksu-video__play"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 0 10 5 1 10Z"/></svg></span></button>
         <figcaption class="ksu-video__cap"><span class="ksu-video__title">PROMIN' rooftop - Odesa</span><span class="ksu-video__meta">TikTok • Sunset set</span></figcaption>
       </figure></div>
       <div class="site-watch__short site-watch__short--b" data-speed="1.06"><figure class="ksu-video ksu-video--tall" data-ksu-video="A5jILCib7N0">
-        <button class="ksu-video__cover" type="button" aria-label="Play video: KSU live at PROMIN'"><img src="media/youtube/short-live-at-promin.jpg" width="1080" height="1920" alt="KSU with her arms raised at the decks in Black Hall" loading="lazy"><span class="ksu-video__play"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 0 10 5 1 10Z"/></svg></span></button>
+        <button class="ksu-video__cover" type="button" aria-label="Play video: KSU live at PROMIN'"><img src="media/youtube/short-live-at-promin.webp" width="1080" height="1920" alt="KSU with her arms raised at the decks in Black Hall" loading="lazy" decoding="async"><span class="ksu-video__play"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 0 10 5 1 10Z"/></svg></span></button>
         <figcaption class="ksu-video__cap"><span class="ksu-video__title">KSU live at PROMIN'</span><span class="ksu-video__meta">Short • Odesa</span></figcaption>
       </figure></div>
     </div>
@@ -104,10 +103,10 @@
   <section class="site-section site-live" id="live">
     <h2 class="ksu-mega ksu-mega--over" data-ksu-fit="0.5" data-ksu-reveal="chars">Live</h2>
     <div class="ksu-collage">
-      <div class="ksu-photo-frame site-live__a" data-ksu-enter="clip"><video class="ksu-photo" src="media/live/montage.mp4" poster="media/live/montage.jpg" width="720" height="1280" muted loop playsinline autoplay preload="metadata" aria-label="Video loop: short cuts of KSU playing rooftop sunsets and club nights, dancing at the decks, and the crowds in front of her"></video></div>
-      <div class="ksu-photo-frame site-live__b" data-ksu-enter="clip" data-ksu-parallax><img class="ksu-photo" src="photos/ksu-05.jpg" width="1086" height="1536" alt="KSU playing a sunset rooftop set in a white dress, the city behind her" loading="lazy"></div>
-      <div class="ksu-photo-frame site-live__c" data-ksu-enter="clip"><video class="ksu-photo" src="media/live/club-set.mp4" poster="media/live/club-set.jpg" width="720" height="1280" muted loop playsinline autoplay preload="metadata" aria-label="Video loop: KSU dancing behind the decks in a club, in front of a screen of green lasers"></video></div>
-      <div class="ksu-photo-frame site-live__d" data-ksu-enter="clip" data-ksu-parallax><img class="ksu-photo" src="photos/ksu-06.jpg" width="1440" height="835" alt="KSU laughing among dancers at a daytime rooftop party" loading="lazy"></div>
+      <div class="ksu-photo-frame site-live__a" data-ksu-enter="clip"><video class="ksu-photo" src="media/live/montage.mp4" poster="media/live/montage.webp" width="720" height="1280" muted loop playsinline preload="none" aria-label="Video loop: short cuts of KSU playing rooftop sunsets and club nights, dancing at the decks, and the crowds in front of her"></video></div>
+      <div class="ksu-photo-frame site-live__b" data-ksu-enter="clip" data-ksu-parallax><img class="ksu-photo" src="photos/ksu-05.webp" width="1086" height="1536" alt="KSU playing a sunset rooftop set in a white dress, the city behind her" loading="lazy" decoding="async"></div>
+      <div class="ksu-photo-frame site-live__c" data-ksu-enter="clip"><video class="ksu-photo" src="media/live/club-set.mp4" poster="media/live/club-set.webp" width="720" height="1280" muted loop playsinline preload="none" aria-label="Video loop: KSU dancing behind the decks in a club, in front of a screen of green lasers"></video></div>
+      <div class="ksu-photo-frame site-live__d" data-ksu-enter="clip" data-ksu-parallax><img class="ksu-photo" src="photos/ksu-06.webp" width="1440" height="835" alt="KSU laughing among dancers at a daytime rooftop party" loading="lazy" decoding="async"></div>
       <p class="ksu-intro ksu-intro--xl site-live__note" data-ksu-reveal="words">KSU's sets follow <em class="ksu-mark">the energy of the crowd</em>, creating a dynamic musical journey rather than a fixed format.</p>
     </div>
   </section>
@@ -122,7 +121,7 @@
       <p class="ksu-eyebrow">Kseniia Podhornyts<br>DJ / Event producer<br>Odesa, Ukraine</p>
     </div>
     <div class="site-profile__body">
-      <div class="ksu-photo-frame site-profile__photo" data-ksu-enter="clip"><img class="ksu-photo" src="photos/profile.jpg" width="1067" height="1600" alt="KSU in a sculpted black dress and sheer gloves, looking away, under red light" loading="lazy"></div>
+      <div class="ksu-photo-frame site-profile__photo" data-ksu-enter="clip"><img class="ksu-photo" src="photos/profile.webp" width="1067" height="1600" alt="KSU in a sculpted black dress and sheer gloves, looking away, under red light" loading="lazy" decoding="async"></div>
       <div class="site-profile__text">
         <p class="ksu-intro ksu-intro--xl" data-ksu-reveal="words">With performance experience across <em class="ksu-mark">Ukraine and Jordan</em>, KSU is available for international bookings, festivals, residencies, private events and long-term contracts worldwide.</p>
         <dl class="ksu-spec" data-ksu-enter="rows">
@@ -142,17 +141,17 @@
     </div>
     <div class="ksu-rail site-bleed" data-ksu-rail>
       <ul class="ksu-rail__track">
-        <li class="ksu-rail__item"><img src="photos/press-leather-profile.jpg" width="1200" height="1800" alt="KSU in profile wearing headphones and dark glasses" loading="lazy"></li>
-        <li class="ksu-rail__item"><img src="photos/press-controller-floor.jpg" width="1199" height="1800" alt="KSU sitting on the floor at a DJ controller, long braids and headphones" loading="lazy"></li>
-        <li class="ksu-rail__item"><img src="photos/press-silver-front.jpg" width="1200" height="1800" alt="KSU in a silver suit holding her headphone cable, braids over her shoulders" loading="lazy"></li>
-        <li class="ksu-rail__item"><img src="photos/press-crouch.jpg" width="1199" height="1800" alt="KSU crouching in a black leather jacket with headphones" loading="lazy"></li>
-        <li class="ksu-rail__item"><img src="photos/press-laughing.jpg" width="1199" height="1800" alt="KSU laughing with her hands on her headphones" loading="lazy"></li>
-        <li class="ksu-rail__item"><img src="photos/press-blue-light.jpg" width="1200" height="1800" alt="KSU in headphones and long braids under blue light" loading="lazy"></li>
-        <li class="ksu-rail__item"><img src="photos/press-controller-desk.jpg" width="1199" height="1800" alt="KSU leaning on a desk beside a DJ controller" loading="lazy"></li>
-        <li class="ksu-rail__item"><img src="photos/press-leather-front.jpg" width="1200" height="1800" alt="KSU facing the camera in headphones and a leather jacket" loading="lazy"></li>
-        <li class="ksu-rail__item"><img src="photos/press-silver-blue.jpg" width="1200" height="1800" alt="KSU in a silver suit and headphones under blue light" loading="lazy"></li>
-        <li class="ksu-rail__item"><img src="photos/press-reach.jpg" width="1200" height="1800" alt="KSU reaching toward the camera, seen from above" loading="lazy"></li>
-        <li class="ksu-rail__item"><img src="photos/press-leather-hands.jpg" width="1200" height="1800" alt="KSU with her hands crossed over a leather jacket" loading="lazy"></li>
+        <li class="ksu-rail__item"><img src="photos/press-leather-profile.webp" width="1200" height="1800" alt="KSU in profile wearing headphones and dark glasses" loading="lazy" decoding="async"></li>
+        <li class="ksu-rail__item"><img src="photos/press-controller-floor.webp" width="1199" height="1800" alt="KSU sitting on the floor at a DJ controller, long braids and headphones" loading="lazy" decoding="async"></li>
+        <li class="ksu-rail__item"><img src="photos/press-silver-front.webp" width="1200" height="1800" alt="KSU in a silver suit holding her headphone cable, braids over her shoulders" loading="lazy" decoding="async"></li>
+        <li class="ksu-rail__item"><img src="photos/press-crouch.webp" width="1199" height="1800" alt="KSU crouching in a black leather jacket with headphones" loading="lazy" decoding="async"></li>
+        <li class="ksu-rail__item"><img src="photos/press-laughing.webp" width="1199" height="1800" alt="KSU laughing with her hands on her headphones" loading="lazy" decoding="async"></li>
+        <li class="ksu-rail__item"><img src="photos/press-blue-light.webp" width="1200" height="1800" alt="KSU in headphones and long braids under blue light" loading="lazy" decoding="async"></li>
+        <li class="ksu-rail__item"><img src="photos/press-controller-desk.webp" width="1199" height="1800" alt="KSU leaning on a desk beside a DJ controller" loading="lazy" decoding="async"></li>
+        <li class="ksu-rail__item"><img src="photos/press-leather-front.webp" width="1200" height="1800" alt="KSU facing the camera in headphones and a leather jacket" loading="lazy" decoding="async"></li>
+        <li class="ksu-rail__item"><img src="photos/press-silver-blue.webp" width="1200" height="1800" alt="KSU in a silver suit and headphones under blue light" loading="lazy" decoding="async"></li>
+        <li class="ksu-rail__item"><img src="photos/press-reach.webp" width="1200" height="1800" alt="KSU reaching toward the camera, seen from above" loading="lazy" decoding="async"></li>
+        <li class="ksu-rail__item"><img src="photos/press-leather-hands.webp" width="1200" height="1800" alt="KSU with her hands crossed over a leather jacket" loading="lazy" decoding="async"></li>
       </ul>
     </div>
     <ul class="ksu-mixes ksu-mixes--xl" data-ksu-enter="rows">
@@ -165,7 +164,7 @@
     <div class="site-booking__head">
       <p class="ksu-eyebrow">Available worldwide</p>
       <div class="site-booking__word">
-        <svg class="ksu-beat" viewBox="0 0 400 400" aria-hidden="true" data-ksu-beat><circle cx="200" cy="200" r="110"/></svg>
+        <span class="site-booking__ring"><svg class="ksu-beat" viewBox="0 0 400 400" aria-hidden="true" data-ksu-beat><circle cx="200" cy="200" r="110"/></svg></span>
         <h2 class="ksu-mega" data-ksu-fit="1" data-ksu-reveal="chars">Booking</h2>
       </div>
     </div>
@@ -180,7 +179,7 @@
           <div><dt>Linktree</dt><dd><a class="ksu-spec__val" href="https://linktr.ee/djksu" target="_blank" rel="noopener">linktr.ee/djksu</a></dd></div>
         </dl>
       </div>
-      <div class="ksu-photo-frame site-booking__photo" data-ksu-enter="clip" data-ksu-parallax><img class="ksu-photo" src="photos/booking.jpg" width="1200" height="1800" alt="KSU resting on her arms, hands raised beside her face, wearing wide silver cuffs" loading="lazy"></div>
+      <div class="ksu-photo-frame site-booking__photo" data-ksu-enter="clip" data-ksu-parallax><img class="ksu-photo" src="photos/booking.webp" width="1200" height="1800" alt="KSU resting on her arms, hands raised beside her face, wearing wide silver cuffs" loading="lazy" decoding="async"></div>
     </div>
     <a class="ksu-cta ksu-cta--solid ksu-cta--mega site-booking__cta" href="https://wa.me/380635340657" target="_blank" rel="noopener">Book KSU <svg class="ksu-cta__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 21 21 3M7 3h14v14"/></svg></a>
     <div class="site-booking__foot">
@@ -203,11 +202,6 @@
 </div>
 </div>
 
-<script src="design-system/project/components/lib/gsap.min.js"></script>
-<script src="design-system/project/components/lib/ScrollTrigger.min.js"></script>
-<script src="design-system/project/components/lib/ScrollSmoother.min.js"></script>
-<script src="design-system/project/components/lib/SplitText.min.js"></script>
-<script src="design-system/project/components/bundle.js"></script>
-<script>KSU.ready();</script>
+<script src="ksu.js?v=b9a98dbe" defer></script>
 </body>
 </html>
