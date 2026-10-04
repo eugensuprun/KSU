@@ -40,13 +40,13 @@ img { display: block; max-width: 100%; }
 .site-watch__short--a { grid-column: 7 / 10; }
 .site-watch__short--b { grid-column: 10 / 13; margin-top: 38%; }
 
-/* Live: four photos placed off the rhythm, with empty columns between them */
+/* Live: the video montage leads, large and straight under the word; the photographs and the second loop hang around it off the rhythm */
 .site-live .ksu-photo-frame { min-height: 0; }
-.site-live__a { grid-column: 1 / 7; aspect-ratio: 1086 / 1536; }
-.site-live__b { grid-column: 9 / 13; aspect-ratio: 2 / 3; margin-top: 46%; }
-.site-live__c { grid-column: 2 / 5; aspect-ratio: 2 / 3; margin-top: -18%; }
-.site-live__d { grid-column: 6 / 12; aspect-ratio: 1440 / 835; margin-top: 12%; }
-.site-live__note { grid-column: 9 / 13; margin-top: var(--space-16); max-width: none; text-align: left; }
+.site-live__a { grid-column: 1 / 7; aspect-ratio: 9 / 16; }
+.site-live__b { grid-column: 9 / 13; aspect-ratio: 1086 / 1536; margin-top: 60%; }
+.site-live__c { grid-column: 10 / 13; grid-row: 2; aspect-ratio: 2 / 3; margin-top: -30%; }
+.site-live__d { grid-column: 2 / 9; grid-row: 2; aspect-ratio: 1440 / 835; margin-top: 10%; }
+.site-live__note { grid-column: 10 / 13; margin-top: var(--space-16); max-width: none; text-align: left; }
 
 /* Profile on paper, kept to about one screen: the word and three lines of small type, then a tall photograph beside one sentence and a short spec list */
 .site-profile { margin-top: clamp(96px, 12vw, 180px); padding-top: var(--space-12); padding-bottom: var(--space-16); }
@@ -66,9 +66,12 @@ img { display: block; max-width: 100%; }
 .site-media .ksu-mixes { margin-top: var(--space-16); }
 
 /* Booking: the closing section. The word with the beat ring, contact details beside one portrait, then one very large button. */
-.site-booking__head { position: relative; isolation: isolate; display: grid; gap: var(--space-6); }
-/* The ring is centred on the word at every size, behind it */
-.site-booking__head .ksu-beat { position: absolute; left: 50%; top: 68%; z-index: -1; width: min(760px, 62%); translate: -50% -50%; }
+.site-booking__head { position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-6); }
+/* The ring sits in the word's own box, so its centre is the word's centre at every size */
+/* min-width 0: without it the word's own width would stretch this box on phones and the word would be sized too large */
+.site-booking__word { position: relative; min-width: 0; }
+.site-booking__head .ksu-eyebrow { text-align: center; }
+.site-booking__head .ksu-beat { position: absolute; left: 50%; top: 50%; z-index: -1; width: min(760px, 62%); translate: -50% -50%; }
 .site-booking__grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--space-12) var(--space-2); align-items: end; margin-top: var(--space-24); }
 .site-booking__text { grid-column: 1 / 8; display: grid; gap: var(--space-12); min-width: 0; }
 .site-booking__photo { grid-column: 9 / 13; aspect-ratio: 3 / 4; min-height: 0; }
@@ -85,10 +88,10 @@ img { display: block; max-width: 100%; }
   .site-watch__copy { grid-column: 1 / 13; padding-top: 0; }
   .site-watch__short--a { grid-column: 1 / 7; }
   .site-watch__short--b { grid-column: 8 / 13; margin-top: 30%; }
-  .site-live__a { grid-column: 1 / 10; }
-  .site-live__b { grid-column: 7 / 13; margin-top: -30%; }
-  .site-live__c { grid-column: 1 / 6; margin-top: 10%; }
-  .site-live__d { grid-column: 3 / 13; margin-top: 8%; }
+  .site-live__a { grid-column: 1 / 11; }
+  .site-live__b { grid-column: 6 / 13; margin-top: -24%; }
+  .site-live__c { grid-column: 1 / 6; grid-row: auto; margin-top: -40%; }
+  .site-live__d { grid-column: 2 / 13; grid-row: auto; margin-top: 8%; }
   .site-live__note { grid-column: 1 / 11; }
   .site-profile__top > div { flex-basis: 70%; }
   .site-profile__photo { grid-column: 1 / 8; }
@@ -108,7 +111,7 @@ img { display: block; max-width: 100%; }
   .site-mixes__head .ksu-eyebrow, .site-media__head .ksu-eyebrow { text-align: left; }
   /* On phones the ring is large: centred behind the word, it runs out past the screen edges */
   .site-booking__head { z-index: 2; padding-block: var(--space-16) var(--space-8); }
-  .site-booking__head .ksu-beat { top: 58%; width: 140%; }
+  .site-booking__head .ksu-beat { width: 140%; }
   .site-booking__grid { margin-top: var(--space-12); }
   .site-media .ksu-rail { padding-left: var(--space-4); }
 
