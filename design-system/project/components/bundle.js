@@ -5,7 +5,7 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.22.0', smoother: null };
+  var api = { version: '0.23.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
@@ -537,31 +537,11 @@
 
     // Two markers on the waveform: the playhead, which shows where the mix is now, and the seek marker,
     // which follows the pointer and shows where a press would jump to, with the time at that point.
-    var head = null, mark = null;
+    var head = null, mark = null, nowEl = null, totalEl = null;
     if (track) {
       head = document.createElement('span'); head.className = 'ksu-player__playhead';
       mark = document.createElement('span'); mark.className = 'ksu-player__seek'; mark.setAttribute('data-time', '');
       track.appendChild(head); track.appendChild(mark);
-    }
-    // While a mix plays, the bars of the waveform move: each one stretches and shrinks around its own height,
-    // on the half beat at 128 BPM, taking a new random size every time. They settle back when it pauses.
-    var moving = null;
-    function dance(playing) {
-      if (!on || !bars.length) return;
-      if (playing) {
-        if (!moving) {
-          moving = gsap.to(bars, {
-            scaleY: function () { return gsap.utils.random(0.45, 1.7); },
-            duration: 60 / 128 / 2, ease: 'sine.inOut', yoyo: true, repeat: -1, repeatRefresh: true,
-            stagger: { each: 0.004, from: 'random' }, transformOrigin: '50% 50%'
-          });
-        }
-        moving.play();
-      } else if (moving) {
-        moving.kill();
-        moving = null;
-        gsap.to(bars, { scaleY: 1, duration: 0.3, ease: 'power2.out', overwrite: true });
-      }
     }
     function clock(ms) {
       var s = Math.max(0, Math.floor(ms / 1000)), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), r = s % 60;
@@ -569,7 +549,17 @@
     }
     function paint(rel, pos) {
       if (fill) { if (has) gsap.set(fill, { scaleX: rel }); else fill.style.transform = 'scaleX(' + rel + ')'; }
-      if (time) time.textContent = clock(pos) + ' / ' + (duration ? clock(duration) : '-:--');
+      if (time) {
+        // Elapsed time and total length are separate, so narrow screens can show the elapsed time alone.
+        if (!nowEl) {
+          time.textContent = '';
+          nowEl = document.createElement('span'); nowEl.className = 'ksu-player__now';
+          totalEl = document.createElement('span'); totalEl.className = 'ksu-player__total';
+          time.appendChild(nowEl); time.appendChild(totalEl);
+        }
+        nowEl.textContent = clock(pos);
+        totalEl.textContent = ' / ' + (duration ? clock(duration) : '-:--');
+      }
       if (track) track.setAttribute('aria-valuenow', Math.round(rel * 100));
       bars.forEach(function (b, n) { b.classList.toggle('is-on', n / bars.length < rel); });
       if (head) head.style.left = (rel * 100).toFixed(2) + '%';
@@ -582,7 +572,6 @@
         if (row) row.classList.toggle('is-playing', onNow);
       });
       api.playing = playing;
-      dance(playing);
       if (toggle) toggle.setAttribute('aria-pressed', playing ? 'true' : 'false');
       if (eq) { if (playing) eq.play(); else eq.pause(); }
     }
@@ -664,8 +653,7 @@
         if (pending && pending !== loaded) { var next = pending; pending = null; load(next); return; }
         pending = null;
         measure();
-        widget.play();
-        watch(loaded);
+        if (wanted) { widget.play(); watch(loaded); }
       });
       widget.bind(E.PLAY, function () { measure(); loading(null); state(true); });
       widget.bind(E.PAUSE, function () { state(false); });
@@ -678,6 +666,25 @@
       });
       widget.bind(E.ERROR, fail);
     }
+    // Build SoundCloud's player ahead of time, silent, with the first mix loaded. Phones only allow sound that starts
+    // inside the press itself; if the player were built on the first press, that press would be spent before it could play.
+    function build(url) {
+      if (frame) return;
+      loaded = url;
+      frame = document.createElement('iframe');
+      frame.className = 'ksu-player__frame';
+      frame.allow = 'autoplay';
+      frame.title = 'SoundCloud player';
+      frame.tabIndex = -1;
+      frame.src = 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(url) + '&auto_play=false&show_artwork=false&visual=false';
+      document.body.appendChild(frame);
+      var script = document.createElement('script');
+      script.src = 'https://w.soundcloud.com/player/api.js';
+      script.onload = function () { widget = window.SC.Widget(frame); bind(); };
+      script.onerror = function () { if (wanted) fail(); };
+      document.head.appendChild(script);
+    }
+    function prepare() { build(buttons[0].getAttribute('data-ksu-track')); }
     function start(btn) {
       var url = btn.getAttribute('data-ksu-track');
       stopVideos();
@@ -690,22 +697,15 @@
       state(false);
       show(btn);
       loading(btn);
-      if (widget && ready) { pending = null; load(url); return; }
+      if (widget && ready) {
+        pending = null;
+        // Both calls are made inside the press: play at once if this mix is the one already loaded, otherwise load it.
+        if (loaded === url) { measure(); widget.play(); watch(url); }
+        else load(url);
+        return;
+      }
       pending = url;
-      if (frame) return;
-      loaded = url;
-      frame = document.createElement('iframe');
-      frame.className = 'ksu-player__frame';
-      frame.allow = 'autoplay';
-      frame.title = 'SoundCloud player';
-      frame.tabIndex = -1;
-      frame.src = 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(url) + '&auto_play=true&show_artwork=false&visual=false';
-      document.body.appendChild(frame);
-      var script = document.createElement('script');
-      script.src = 'https://w.soundcloud.com/player/api.js';
-      script.onload = function () { widget = window.SC.Widget(frame); bind(); };
-      script.onerror = fail;
-      document.head.appendChild(script);
+      build(url);
     }
     // Jump, and move the playhead at once rather than waiting for the player to report back.
     function seek(rel) {
@@ -717,27 +717,53 @@
 
     api.pauseAudio = function () { wanted = false; if (widget) widget.pause(); };
     buttons.forEach(function (b) { b.addEventListener('click', function () { start(b); }); });
+    // Get the player ready as soon as the visitor touches the page or the mixes come near the screen.
+    ['pointerdown', 'touchstart', 'keydown'].forEach(function (type) {
+      window.addEventListener(type, prepare, { once: true, passive: true });
+    });
+    if ('IntersectionObserver' in window) {
+      var near = new IntersectionObserver(function (entries) {
+        if (entries.some(function (en) { return en.isIntersecting; })) { near.disconnect(); prepare(); }
+      }, { rootMargin: '800px 0px' });
+      near.observe(buttons[0]);
+    } else prepare();
     if (toggle) toggle.addEventListener('click', function () {
       if (widget) widget.isPaused(function (paused) { wanted = paused; widget.toggle(); });
     });
     if (closeBtn) closeBtn.addEventListener('click', close);
     if (track) {
-      track.addEventListener('pointermove', function (e) {
+      // Press and release to jump, or press, drag along the waveform and release where you want to land.
+      var dragging = false;
+      function at(e) {
         var box = track.getBoundingClientRect();
-        var rel = Math.max(0, Math.min(1, (e.clientX - box.left) / box.width));
+        return Math.max(0, Math.min(1, (e.clientX - box.left) / box.width));
+      }
+      function point(e) {
+        var rel = at(e);
         track.classList.add('is-hover');
         mark.style.left = (rel * 100).toFixed(2) + '%';
         mark.setAttribute('data-time', duration ? clock(rel * duration) : '');
         bars.forEach(function (b, n) { b.classList.toggle('is-hover', n / bars.length < rel); });
-      });
-      track.addEventListener('pointerleave', function () {
+      }
+      function clear() {
         track.classList.remove('is-hover');
         bars.forEach(function (b) { b.classList.remove('is-hover'); });
+      }
+      track.addEventListener('pointerdown', function (e) {
+        dragging = true;
+        if (track.setPointerCapture) track.setPointerCapture(e.pointerId);
+        point(e);
+        e.preventDefault();
       });
-      track.addEventListener('click', function (e) {
-        var box = track.getBoundingClientRect();
-        seek((e.clientX - box.left) / box.width);
+      track.addEventListener('pointermove', point);
+      track.addEventListener('pointerup', function (e) {
+        if (!dragging) return;
+        dragging = false;
+        seek(at(e));
+        if (e.pointerType !== 'mouse') clear();
       });
+      track.addEventListener('pointercancel', function () { dragging = false; clear(); });
+      track.addEventListener('pointerleave', function () { if (!dragging) clear(); });
       track.addEventListener('keydown', function (e) {
         if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
         e.preventDefault();
