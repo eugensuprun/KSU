@@ -465,6 +465,10 @@ a:hover > .ksu-badge, a:focus-visible > .ksu-badge { color: var(--ink); }
 .ksu-cover__media { position: absolute; top: 0; right: 0; bottom: 0; z-index: 1; width: 58%; min-height: 0; }
 .ksu-cover__info { position: relative; z-index: 3; display: grid; gap: var(--space-6); justify-items: start; width: 36%; min-width: 280px; padding-top: 112px; }
 .ksu-cover__statement { margin: 0; color: var(--ink); font: 500 clamp(19px, 1.95vw, 28px) / 1.45 var(--font-label); text-transform: uppercase; }
+/* The PROMIN' wordmark stands in for the word at the end of the statement and links out */
+.ksu-cover__logo { display: inline-block; vertical-align: -0.35em; color: inherit; transition: color var(--ksu-hover); }
+.ksu-cover__logo svg { display: block; width: auto; height: 1.4em; fill: currentColor; }
+.ksu-cover__logo:hover { color: var(--accent); }
 .ksu-cover__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4) var(--space-8); margin-top: var(--space-4); }
 .ksu-cover__title { position: absolute; left: 0; bottom: 0; z-index: 0; display: block; width: max-content; margin: 0; color: var(--accent); font: 500 22vw / 0.74 var(--font-heading); letter-spacing: -0.03em; text-transform: uppercase; white-space: nowrap; }
 .ksu-cover__title--outline { z-index: 2; color: transparent; -webkit-text-stroke: 2px var(--accent); clip-path: inset(-10% 0 -10% 42%); pointer-events: none; }
