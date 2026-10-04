@@ -5,7 +5,7 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.26.0', smoother: null };
+  var api = { version: '0.27.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
@@ -358,26 +358,14 @@
     pass.to(el, { '--ksu-dim': 0.7, ease: 'none' }, 0);
   }
 
-  // A row of tall photographs that runs by itself in an endless loop. Hovering it pauses the run and shows two arrows;
-  // an arrow moves the row one step, and the row can also be dragged sideways with a pointer or a finger. data-ksu-rail.
+  // A row of tall photographs that travels sideways while its section is held in the middle of the screen. data-ksu-rail.
   function rail(el) {
     var track = el.querySelector('.ksu-rail__track');
     if (!on || !track) return;
-    el.style.overflow = 'hidden';
-
-    // A second copy of the photographs follows the first, so the row can wrap round without a gap.
-    var originals = Array.prototype.slice.call(track.children);
-    originals.forEach(function (it) {
-      var copy = it.cloneNode(true);
-      copy.setAttribute('aria-hidden', 'true');
-      var img = copy.querySelector('img');
-      if (img) img.alt = '';
-      track.appendChild(copy);
-    });
+    // Each photograph stays closed until it comes on screen, then opens upward from a mask and settles from a larger scale.
+    // The first few open as the rail arrives; the rest open one by one as the scroll brings them in from the right.
+    // The mask goes on the photograph, not on its frame: a frame that is fully masked is never reported as on screen.
     var items = Array.prototype.slice.call(track.children);
-    all('img', track).forEach(function (img) { img.draggable = false; });
-
-    // Each photograph stays closed until it first comes on screen, then opens upward from a mask.
     var shots = items.map(function (it) { return it.querySelector('img, .ksu-photo--stage') || it; });
     if ('IntersectionObserver' in window) {
       gsap.set(shots, { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.3 });
@@ -394,65 +382,13 @@
         });
       }, { threshold: 0.1 });
       items.forEach(function (it) { io.observe(it); });
+      // A way to show every photograph at once, for debugging.
+      api.openRail = function () { gsap.set(shots, { clearProps: 'clipPath,scale' }); };
     }
-
-    // Position is kept as one running number and wrapped only when drawn, so steps and drags never fight the loop.
-    var pos = { x: 0 }, speed = 45, vel = 0, hover = false, dragging = false, visible = true, lastX = 0, lastT = 0;
-    function half() { return track.scrollWidth / 2; }
-    gsap.ticker.add(function (time, delta) {
-      if (!visible) return;
-      var dt = Math.min(delta, 100) / 1000;
-      if (!dragging) {
-        if (!hover && !gsap.isTweening(pos)) pos.x -= speed * dt;
-        if (Math.abs(vel) > 1) { pos.x += vel * dt; vel *= Math.pow(0.05, dt); } else vel = 0;
-      }
-      var h = half();
-      if (h) gsap.set(track, { x: ((pos.x % h) - h) % h });
-    });
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; }).observe(el);
-    }
-
-    // Arrows: shown while the pointer is over the row. Each moves the row by a little over half its width.
-    function arrow(dir) {
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'ksu-rail__arrow ksu-rail__arrow--' + (dir < 0 ? 'prev' : 'next');
-      b.setAttribute('aria-label', dir < 0 ? 'Earlier photographs' : 'More photographs');
-      b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="' +
-        (dir < 0 ? 'M21 12H3M10 5 3 12 10 19' : 'M3 12H21M14 5 21 12 14 19') + '"/></svg>';
-      b.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
-      b.addEventListener('click', function () {
-        vel = 0;
-        gsap.to(pos, { x: pos.x - dir * el.clientWidth * 0.6, duration: 0.9, ease: 'power3.out', overwrite: true });
-      });
-      el.appendChild(b);
-    }
-    arrow(-1); arrow(1);
-    el.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hover = true; });
-    el.addEventListener('pointerleave', function () { hover = false; });
-    el.addEventListener('focusin', function () { hover = true; });
-    el.addEventListener('focusout', function () { hover = false; });
-
-    // Drag: the row follows the pointer; on release it keeps some of its speed and slows down.
-    el.addEventListener('pointerdown', function (e) {
-      if (e.pointerType === 'mouse' && e.button !== 0) return;
-      dragging = true; vel = 0; lastX = e.clientX; lastT = e.timeStamp;
-      gsap.killTweensOf(pos);
-      el.classList.add('is-dragging');
-      if (el.setPointerCapture) el.setPointerCapture(e.pointerId);
-    });
-    el.addEventListener('pointermove', function (e) {
-      if (!dragging) return;
-      var dx = e.clientX - lastX, dtm = Math.max(1, e.timeStamp - lastT);
-      pos.x += dx;
-      vel = Math.max(-2500, Math.min(2500, dx / dtm * 1000));
-      lastX = e.clientX; lastT = e.timeStamp;
-    });
-    function release() { dragging = false; el.classList.remove('is-dragging'); }
-    el.addEventListener('pointerup', release);
-    el.addEventListener('pointercancel', release);
-    el.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    if (window.innerWidth < 721) return;
+    var travel = function () { return Math.max(0, track.scrollWidth - el.clientWidth); };
+    gsap.to(track, { x: function () { return -travel(); }, ease: 'none',
+      scrollTrigger: { trigger: el, start: 'center center', end: function () { return '+=' + travel(); }, pin: true, scrub: 1, invalidateOnRefresh: true } });
   }
 
   // The fixed booking button. It appears once the hero has gone by, leaves when the footer arrives, switches to its inverse colours while it sits over the

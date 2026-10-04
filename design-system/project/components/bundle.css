@@ -518,22 +518,36 @@ a:hover > .ksu-badge--solid, a:focus-visible > .ksu-badge--solid { background: v
 .ksu-index--xl .ksu-index__label { max-width: 12em; }
 @media (max-width: 720px) { .ksu-index--xl .ksu-index__item, .ksu-index--xl .ksu-index__item:nth-child(n + 5) { grid-column: span 12; } }
 
-/* PhotoRail: tall photographs in a row that runs by itself in a loop; arrows appear on hover and the row can be dragged */
-.ksu-rail { position: relative; overflow-x: auto; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; scrollbar-width: none; }
-.ksu-rail::-webkit-scrollbar { display: none; }
-.ksu-rail.is-dragging { cursor: grabbing; }
+/* PhotoRail: tall photographs in a row that travels sideways while the section is held in place */
+.ksu-rail { overflow: hidden; }
 .ksu-rail__track { display: flex; gap: var(--space-2); width: max-content; margin: 0; padding: 0; list-style: none; will-change: transform; }
 .ksu-rail__item { flex: none; height: clamp(360px, 72vh, 780px); overflow: hidden; background: var(--surface-1); }
-.ksu-rail__item img { display: block; width: auto; height: 100%; filter: saturate(0.9) contrast(1.05); pointer-events: none; }
-.ksu-rail__arrow { position: absolute; top: 50%; z-index: 2; display: grid; place-items: center; width: 72px; height: 72px; padding: 0; border: 0; background: var(--accent); color: var(--on-accent); cursor: pointer; opacity: 0; translate: 0 -50%; transition: opacity var(--ksu-hover), background var(--ksu-hover); }
-.ksu-rail__arrow--prev { left: var(--space-8); }
-.ksu-rail__arrow--next { right: var(--space-8); }
-.ksu-rail__arrow svg { width: 28px; height: 28px; }
-.ksu-rail:hover .ksu-rail__arrow, .ksu-rail__arrow:focus-visible { opacity: 1; }
-.ksu-rail__arrow:hover { background: var(--ink); }
-.ksu-rail__arrow:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
-@media (hover: none) { .ksu-rail__arrow { display: none; } }
-@media (max-width: 720px) { .ksu-rail__item { height: 62vh; } }
+.ksu-rail__item img { display: block; width: auto; height: 100%; filter: saturate(0.9) contrast(1.05); }
+@media (max-width: 720px) {
+  /* Swipe sideways on phones; the scrollbar itself is hidden */
+  .ksu-rail { overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; -webkit-overflow-scrolling: touch; }
+  .ksu-rail::-webkit-scrollbar { display: none; }
+  .ksu-rail__item { height: 62vh; scroll-snap-align: start; }
+}
+
+/* SpecList: small mono labels against large values, on hairlines. For the profile's experience. */
+.ksu-spec { display: grid; margin: 0; }
+.ksu-spec > div { display: grid; grid-template-columns: 10em minmax(0, 1fr); gap: var(--space-2) var(--space-6); align-items: baseline; padding-block: var(--space-6); border-top: var(--hairline) solid var(--line); }
+.ksu-spec dt { color: var(--ink-muted); font: 400 12px/17px var(--font-mono); text-transform: uppercase; }
+.ksu-spec dd { display: grid; gap: var(--space-2); margin: 0; min-width: 0; }
+.ksu-spec b { color: var(--ink); font: 500 clamp(28px, 3.6vw, 56px) / 0.95 var(--font-heading); letter-spacing: -0.02em; text-transform: uppercase; }
+.ksu-spec span { color: var(--ink-muted); font: 400 16px/22px var(--font-sans); }
+.ksu-spec__run { color: var(--ink); font: 500 clamp(14px, 1.2vw, 18px) / 1.5 var(--font-heading); letter-spacing: -0.01em; text-transform: uppercase; }
+.ksu-spec__run i { margin-inline: 0.4em; color: var(--accent); font-style: normal; }
+.ksu-spec__val { color: var(--ink); font: 500 clamp(18px, 2vw, 30px) / 1.15 var(--font-heading); letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.ksu-spec a { color: inherit; text-decoration: none; transition: color var(--ksu-hover); }
+.ksu-spec a:hover { color: var(--accent); }
+.ksu-spec a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.ksu-paper .ksu-spec > div { border-color: var(--paper-line); }
+.ksu-paper .ksu-spec dt, .ksu-paper .ksu-spec span { color: var(--on-paper-muted); }
+.ksu-paper .ksu-spec b, .ksu-paper .ksu-spec__run { color: var(--on-paper); }
+.ksu-paper .ksu-spec__run i { color: var(--accent-deep); }
+@media (max-width: 720px) { .ksu-spec > div { grid-template-columns: minmax(0, 1fr); padding-block: var(--space-4); } }
 
 /* PaperSection: rows */
 .ksu-paper .ksu-mix { border-color: var(--paper-line); }
