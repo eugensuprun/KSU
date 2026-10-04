@@ -5,7 +5,7 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.30.0', smoother: null };
+  var api = { version: '0.31.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
@@ -367,7 +367,8 @@
     // The mask goes on the photograph, not on its frame: a frame that is fully masked is never reported as on screen.
     var items = Array.prototype.slice.call(track.children);
     var shots = items.map(function (it) { return it.querySelector('img, .ksu-photo--stage') || it; });
-    if ('IntersectionObserver' in window) {
+    // Not on phones: there the photographs are simply in place, at one fixed size.
+    if ('IntersectionObserver' in window && window.innerWidth >= 721) {
       gsap.set(shots, { clipPath: 'inset(100% 0% 0% 0%)', scale: 1.3 });
       var queue = 0;
       var io = new IntersectionObserver(function (entries) {

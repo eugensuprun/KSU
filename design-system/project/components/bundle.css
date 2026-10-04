@@ -528,7 +528,8 @@ a:hover > .ksu-badge--solid, a:focus-visible > .ksu-badge--solid { background: v
   .ksu-rail { overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; -webkit-overflow-scrolling: touch; }
   .ksu-rail::-webkit-scrollbar { display: none; }
   .ksu-rail__copy { display: none; }
-  .ksu-rail__item { height: 62vh; scroll-snap-align: start; }
+  /* Height from the screen's width: the width never changes while scrolling, the height does as the browser bars come and go */
+  .ksu-rail__item { height: min(120vw, 560px); scroll-snap-align: start; }
 }
 
 /* SpecList: small mono labels against large values, on hairlines. For the profile's experience. */
