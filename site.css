@@ -62,7 +62,6 @@ img { display: block; max-width: 100%; }
 .site-media__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--space-6); margin-bottom: var(--space-12); }
 .site-media__head > div { flex: 1 1 60%; min-width: 0; }
 .site-media__head .ksu-eyebrow { padding-bottom: 0.6em; text-align: right; }
-.site-media .ksu-rail { padding-left: var(--space-8); }
 .site-media .ksu-mixes { margin-top: var(--space-16); }
 
 /* Booking: the closing section. The word with the beat ring, contact details beside one portrait, then one very large button. */
@@ -109,6 +108,5 @@ img { display: block; max-width: 100%; }
   .site-booking__head { z-index: 2; padding-block: var(--space-16) var(--space-8); }
   .site-booking__head .ksu-beat { right: -30%; top: 100%; width: 140%; }
   .site-booking__grid { margin-top: var(--space-12); }
-  .site-media .ksu-rail { padding-left: var(--space-4); }
 
 }
