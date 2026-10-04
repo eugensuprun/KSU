@@ -5,7 +5,7 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.28.0', smoother: null };
+  var api = { version: '0.29.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
@@ -507,11 +507,22 @@
   function marquee(el) {
     var track = el.firstElementChild;
     if (!on || !track) return;
+    // The items are written twice, so the band wraps round when the first set has gone by. It rests while it is off screen.
+    var n = track.children.length / 2;
+    if (n < 1 || n % 1) return;
     var back = el.getAttribute('data-ksu-marquee') === 'reverse';
-    gsap.fromTo(track, { xPercent: back ? -50 : 0 }, {
-      xPercent: back ? 0 : -50, ease: 'none',
-      scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: 0.6 }
+    var x = 0, speed = 80, visible = true;
+    gsap.ticker.add(function (time, delta) {
+      if (!visible) return;
+      var half = track.children[n].offsetLeft - track.children[0].offsetLeft;
+      if (!half) return;
+      x += speed * Math.min(delta, 100) / 1000;
+      if (x >= half) x -= half;
+      gsap.set(track, { x: back ? x - half : -x });
     });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; }).observe(el);
+    }
   }
 
   // The lit layer of the ring field: one SVG circle per ring, each glowing and fading on its own clock.

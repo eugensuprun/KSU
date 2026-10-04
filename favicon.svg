@@ -1,6 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
   <title>KSU</title>
   <rect id="ground" width="32" height="32" fill="#f25940"/>
-  <circle id="ring" cx="16" cy="16" r="9" fill="none" stroke="#0d0d0d" stroke-width="2.5"/>
-  <circle id="core" cx="16" cy="16" r="2.5" fill="#0d0d0d"/>
+  <path id="k" d="M8 6h5v8.2L19.6 6H26l-7.6 9.2L26.5 26h-6.3l-5.3-7.4L13 20.9V26H8z" fill="#0d0d0d"/>
 </svg>
