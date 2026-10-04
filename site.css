@@ -46,7 +46,8 @@ img { display: block; max-width: 100%; }
 .site-live__b { grid-column: 9 / 13; aspect-ratio: 1086 / 1536; margin-top: 60%; }
 .site-live__c { grid-column: 10 / 13; grid-row: 2; aspect-ratio: 2 / 3; margin-top: -30%; }
 .site-live__d { grid-column: 2 / 9; grid-row: 2; aspect-ratio: 1440 / 835; margin-top: 10%; }
-.site-live__note { grid-column: 10 / 13; margin-top: var(--space-16); max-width: none; text-align: left; }
+/* The statement closes the section as a full row of large serif type, with its key phrase in the accent */
+.site-live__note { grid-column: 2 / 12; grid-row: 3; margin-top: var(--space-24); font-size: clamp(28px, 4.4vw, 68px); line-height: 1.12; }
 
 /* Profile on paper, kept to about one screen: the word and three lines of small type, then a tall photograph beside one sentence and a short spec list */
 .site-profile { margin-top: clamp(96px, 12vw, 180px); padding-top: var(--space-12); padding-bottom: var(--space-16); }
@@ -92,7 +93,7 @@ img { display: block; max-width: 100%; }
   .site-live__b { grid-column: 6 / 13; margin-top: -24%; }
   .site-live__c { grid-column: 1 / 6; grid-row: auto; margin-top: -40%; }
   .site-live__d { grid-column: 2 / 13; grid-row: auto; margin-top: 8%; }
-  .site-live__note { grid-column: 1 / 11; }
+  .site-live__note { grid-column: 1 / 13; grid-row: auto; margin-top: var(--space-16); }
   .site-profile__top > div { flex-basis: 70%; }
   .site-profile__photo { grid-column: 1 / 8; }
   .site-profile__text { grid-column: 1 / 13; }
