@@ -5,7 +5,7 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.23.0', smoother: null };
+  var api = { version: '0.24.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
@@ -535,7 +535,7 @@
     var bars = track ? all('.ksu-wave rect', track) : [];
     var eq = bar && on ? gsap.to(all('.ksu-eq rect', bar), { scaleY: 0.25, duration: 0.3, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: 0.12, paused: true }) : null;
 
-    // Two markers on the waveform: the playhead, which shows where the mix is now, and the seek marker,
+    // Two markers on the progress bar: the handle, which shows where the mix is now, and the seek marker,
     // which follows the pointer and shows where a press would jump to, with the time at that point.
     var head = null, mark = null, nowEl = null, totalEl = null;
     if (track) {
@@ -575,14 +575,13 @@
       if (toggle) toggle.setAttribute('aria-pressed', playing ? 'true' : 'false');
       if (eq) { if (playing) eq.play(); else eq.pause(); }
     }
-    // Loading: from the press until SoundCloud actually starts the mix, the waveform in the bar shimmers. Nothing else changes.
+    // Loading: from the press until SoundCloud actually starts the mix, the progress bar pulses. Nothing else changes.
     var shimmer = null, closeBtn = q('[data-ksu-player-close]');
     function loading(btn) {
-      if (shimmer) { shimmer.kill(); shimmer = null; if (has) gsap.set(bars, { clearProps: 'opacity' }); }
+      if (shimmer) { shimmer.kill(); shimmer = null; if (has && track) gsap.set(track, { clearProps: 'opacity' }); }
       if (!btn) return;
-      if (on && bars.length) shimmer = gsap.fromTo(bars, { opacity: 1 }, { opacity: 0.3, duration: 0.5, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: { each: 0.015 } });
+      if (on && track) shimmer = gsap.fromTo(track, { opacity: 1 }, { opacity: 0.35, duration: 0.5, ease: 'sine.inOut', yoyo: true, repeat: -1 });
     }
-    // Closing the bar stops the mix and puts the bar away; pressing a mix again brings it back.
     // Tell the page how tall the bar is, so anything fixed above it (the booking button) can keep clear of it.
     var closing = false;
     function room() {
@@ -732,7 +731,7 @@
     });
     if (closeBtn) closeBtn.addEventListener('click', close);
     if (track) {
-      // Press and release to jump, or press, drag along the waveform and release where you want to land.
+      // Press and release to jump, or press, drag along the bar and release where you want to land.
       var dragging = false;
       function at(e) {
         var box = track.getBoundingClientRect();

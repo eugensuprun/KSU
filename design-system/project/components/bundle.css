@@ -265,12 +265,12 @@
 .ksu-player[hidden] { display: none; }
 .ksu-player__body { display: grid; gap: var(--space-2); flex: 1; min-width: 0; }
 .ksu-player__title { margin: 0; overflow: hidden; font: 500 14px/20px var(--font-heading); letter-spacing: -0.01em; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
-.ksu-player__progress { position: relative; height: 12px; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
-.ksu-player__progress--wave { height: 32px; }
-.ksu-player__progress--wave::before { display: none; }
-.ksu-player__head { display: flex; align-items: center; gap: var(--space-2); min-width: 0; }
-.ksu-player__progress::before, .ksu-player__fill { content: ""; position: absolute; left: 0; right: 0; top: 5px; height: 2px; background: var(--line); }
+/* The progress bar: a thin line, filled in accent up to the current position, with a square handle on that position.
+   The element is taller than the line so it is easy to press and drag. */
+.ksu-player__progress { position: relative; height: 24px; cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
+.ksu-player__progress::before, .ksu-player__fill { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 3px; margin-top: -1.5px; background: var(--line); }
 .ksu-player__fill { background: var(--accent); transform: scaleX(0); transform-origin: 0 50%; }
+.ksu-player__head { display: flex; align-items: center; gap: var(--space-2); min-width: 0; }
 .ksu-player__time { flex: none; color: var(--ink-muted); font: 400 12px/17px var(--font-mono); font-variant-numeric: tabular-nums; }
 .ksu-player__frame { position: fixed; left: 0; bottom: 0; width: 1px; height: 1px; border: 0; opacity: 0; pointer-events: none; }
 @media (max-width: 720px) {
@@ -419,9 +419,8 @@ a:hover > .ksu-badge, a:focus-visible > .ksu-badge { color: var(--ink); }
 .ksu-wave rect.is-hover { fill: var(--ink-muted); }
 .ksu-wave rect.is-on { fill: var(--accent); }
 /* Playhead: where the mix is now. Seek marker: where a press would jump to, with the time there. */
-.ksu-player__playhead, .ksu-player__seek { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; pointer-events: none; }
-/* The playhead is the same height as the bars and shows from the first moment */
-.ksu-player__playhead { left: 0; background: var(--ink); }
+.ksu-player__playhead { position: absolute; left: 0; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; background: var(--ink); pointer-events: none; }
+.ksu-player__seek { position: absolute; top: 4px; bottom: 4px; width: 2px; margin-left: -1px; pointer-events: none; }
 .ksu-player__seek { background: var(--ink-muted); opacity: 0; }
 .ksu-player__progress.is-hover .ksu-player__seek { opacity: 1; }
 .ksu-player__seek::after { content: attr(data-time); position: absolute; left: 50%; bottom: 100%; padding: 2px 6px; background: var(--ink); color: var(--on-accent); font: 400 11px/15px var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; translate: -50% -4px; }
