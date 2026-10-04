@@ -358,7 +358,7 @@
 .ksu-spot:hover::after { opacity: 1; }
 
 /* Mega: one giant word that opens a section. With data-ksu-fit the script sizes it to fill its container. */
-.ksu-mega { display: block; width: max-content; max-width: none; margin: 0; color: var(--ink); font: 500 clamp(64px, 18vw, 300px) / 0.8 var(--font-heading); letter-spacing: -0.03em; text-transform: uppercase; white-space: nowrap; }
+.ksu-mega { display: block; width: max-content; max-width: none; margin: 0; padding-top: 0.08em; color: var(--ink); font: 500 clamp(64px, 18vw, 300px) / 0.8 var(--font-heading); letter-spacing: -0.03em; text-transform: uppercase; white-space: nowrap; }
 .ksu-mega--over { position: relative; z-index: 2; margin-bottom: -0.22em; mix-blend-mode: difference; pointer-events: none; }
 .ksu-paper .ksu-mega { color: var(--on-paper); }
 

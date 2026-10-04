@@ -5,11 +5,24 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.24.0', smoother: null };
+  var api = { version: '0.25.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
+    ST.config({ ignoreMobileResize: true });
     gsap.defaults({ ease: 'expo.out', duration: 1.1 });
+  }
+
+  // Run a callback when the window's width changes. Phones fire resize as the address bar slides in and out,
+  // which changes only the height; re-measuring then makes the page twitch.
+  function onWidth(fn) {
+    var last = window.innerWidth, timer;
+    window.addEventListener('resize', function () {
+      if (window.innerWidth === last) return;
+      last = window.innerWidth;
+      clearTimeout(timer);
+      timer = setTimeout(fn, 150);
+    });
   }
 
   function all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
@@ -24,11 +37,7 @@
       if (w) el.style.fontSize = (100 * box.clientWidth * share / w).toFixed(2) + 'px';
     }
     size();
-    var timer;
-    window.addEventListener('resize', function () {
-      clearTimeout(timer);
-      timer = setTimeout(function () { size(); if (has) ST.refresh(); }, 150);
-    });
+    onWidth(function () { size(); if (has) ST.refresh(); });
   }
 
   // A video cover that becomes the YouTube player when pressed. data-ksu-video="<video id>" on the figure.
@@ -100,8 +109,9 @@
       gsap.fromTo(rd.words, { opacity: 0.2 }, { opacity: 1, ease: 'none', stagger: 0.1,
         scrollTrigger: { trigger: el, start: 'top 82%', end: 'bottom 55%', scrub: true } });
     } else if (mode === 'chars') {
-      var c = Split.create(el, { type: 'chars', mask: 'chars' });
-      gsap.from(c.chars, { yPercent: 110, duration: 1.2, stagger: 0.06, scrollTrigger: st });
+      // No mask: these words are set with very tight leading, and a mask as tall as the line would shave the tops of the letters.
+      var c = Split.create(el, { type: 'chars' });
+      gsap.from(c.chars, { yPercent: 45, autoAlpha: 0, duration: 1.1, stagger: 0.06, scrollTrigger: st });
     } else {
       Split.create(el, {
         type: 'lines', mask: 'lines', autoSplit: true,
@@ -305,11 +315,7 @@
     var outline = el.querySelector('.ksu-cover__title--outline');
     function size() { coverSize(el); }
     size();
-    var timer;
-    window.addEventListener('resize', function () {
-      clearTimeout(timer);
-      timer = setTimeout(function () { size(); if (has) ST.refresh(); }, 150);
-    });
+    onWidth(function () { size(); if (has) ST.refresh(); });
     if (!on) { shown(); return; }
 
     opening = opening || { wait: 0, handoff: false };
@@ -588,7 +594,7 @@
       var h = bar && !bar.hidden && !closing ? bar.offsetHeight : 0;
       document.documentElement.style.setProperty('--ksu-player-h', h + 'px');
     }
-    window.addEventListener('resize', room);
+    onWidth(room);
     function close() {
       wanted = false;
       if (widget) widget.pause();
@@ -625,6 +631,9 @@
     // Switching mixes: the player is told to load the new one and then explicitly to play it, and is checked twice afterwards.
     // If a press arrives while the player is still starting up or loading, the latest press wins.
     var frame = null, ready = false, pending = null, loaded = null, wanted = false, checks = [];
+    // While one mix is being swapped for another, the old one keeps reporting its position for a moment.
+    // Those reports are ignored so the bar stays at the start until the new mix actually plays.
+    var switching = false;
     function watch(url) {
       checks.forEach(clearTimeout);
       checks = [1500, 4000].map(function (ms) {
@@ -654,10 +663,10 @@
         measure();
         if (wanted) { widget.play(); watch(loaded); }
       });
-      widget.bind(E.PLAY, function () { measure(); loading(null); state(true); });
+      widget.bind(E.PLAY, function () { switching = false; measure(); loading(null); state(true); });
       widget.bind(E.PAUSE, function () { state(false); });
-      widget.bind(E.PLAY_PROGRESS, function (e) { paint(e.relativePosition, e.currentPosition); });
-      widget.bind(E.SEEK, function (e) { paint(e.relativePosition, e.currentPosition); });
+      widget.bind(E.PLAY_PROGRESS, function (e) { if (!switching) paint(e.relativePosition, e.currentPosition); });
+      widget.bind(E.SEEK, function (e) { if (!switching) paint(e.relativePosition, e.currentPosition); });
       widget.bind(E.FINISH, function () {
         state(false);
         var next = buttons[buttons.indexOf(current) + 1];
@@ -700,7 +709,7 @@
         pending = null;
         // Both calls are made inside the press: play at once if this mix is the one already loaded, otherwise load it.
         if (loaded === url) { measure(); widget.play(); watch(url); }
-        else load(url);
+        else { switching = true; paint(0, 0); load(url); }
         return;
       }
       pending = url;
@@ -708,7 +717,7 @@
     }
     // Jump, and move the playhead at once rather than waiting for the player to report back.
     function seek(rel) {
-      if (!widget || !duration) return;
+      if (!widget || !duration || switching) return;
       rel = Math.max(0, Math.min(1, rel));
       widget.seekTo(rel * duration);
       paint(rel, rel * duration);
