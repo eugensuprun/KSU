@@ -5,7 +5,7 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.31.0', smoother: null };
+  var api = { version: '0.32.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
@@ -56,10 +56,14 @@
       if (api.pauseAudio) api.pauseAudio();
       var f = document.createElement('iframe');
       f.className = 'ksu-video__frame';
-      f.title = cover.getAttribute('aria-label') || 'YouTube video';
+      f.title = cover.getAttribute('aria-label') || 'Video';
       f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
       f.allowFullscreen = true;
-      f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(el.getAttribute('data-ksu-video')) + '?autoplay=1&rel=0&playsinline=1';
+      var id = encodeURIComponent(el.getAttribute('data-ksu-video'));
+      // data-ksu-video-from="tiktok" plays a TikTok in its own player; anything else is a YouTube id.
+      f.src = el.getAttribute('data-ksu-video-from') === 'tiktok'
+        ? 'https://www.tiktok.com/player/v1/' + id + '?autoplay=1&rel=0&description=0&music_info=0'
+        : 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1';
       var holder = document.createElement('div');
       holder.className = cover.className;
       holder.style.cursor = 'auto';
