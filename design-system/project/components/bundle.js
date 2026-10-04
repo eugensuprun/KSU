@@ -5,7 +5,7 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.29.0', smoother: null };
+  var api = { version: '0.30.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
@@ -386,19 +386,30 @@
       api.openRail = function () { gsap.set(shots, { clearProps: 'clipPath,scale' }); };
     }
     // On phones the row stays an ordinary sideways swipe.
-    if (window.innerWidth < 721) return;
     // On wider screens it runs by itself in an endless loop: a second copy of the photographs follows the first,
     // and the row wraps round when the first copy has gone by. It rests while it is off screen.
-    el.style.overflow = 'hidden';
-    items.forEach(function (it) {
-      var copy = it.cloneNode(true);
-      copy.setAttribute('aria-hidden', 'true');
-      var img = copy.querySelector('img');
-      if (img) { img.alt = ''; gsap.set(img, { clearProps: 'clipPath,scale' }); }
-      track.appendChild(copy);
-    });
-    var x = 0, speed = 45, visible = true;
+    // On phones it does not move: the row is an ordinary sideways swipe and the copies are hidden. The width is checked
+    // as it runs, so a window that is narrowed (or a phone that is turned) stops and becomes swipeable at once.
+    var wide = window.matchMedia('(min-width: 721px)');
+    var built = false, running = false, x = 0, speed = 45, visible = true;
+    function build() {
+      built = true;
+      items.forEach(function (it) {
+        var copy = it.cloneNode(true);
+        copy.classList.add('ksu-rail__copy');
+        copy.setAttribute('aria-hidden', 'true');
+        var img = copy.querySelector('img');
+        if (img) { img.alt = ''; gsap.set(img, { clearProps: 'clipPath,scale' }); }
+        track.appendChild(copy);
+      });
+    }
     gsap.ticker.add(function (time, delta) {
+      if (!wide.matches) {
+        if (running) { running = false; x = 0; gsap.set(track, { clearProps: 'transform' }); el.style.overflow = ''; }
+        return;
+      }
+      if (!built) build();
+      if (!running) { running = true; el.scrollLeft = 0; el.style.overflow = 'hidden'; }
       if (!visible) return;
       var half = track.children[items.length].offsetLeft - items[0].offsetLeft;
       if (!half) return;

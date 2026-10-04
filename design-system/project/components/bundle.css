@@ -527,6 +527,7 @@ a:hover > .ksu-badge--solid, a:focus-visible > .ksu-badge--solid { background: v
   /* Swipe sideways on phones; the scrollbar itself is hidden */
   .ksu-rail { overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; -webkit-overflow-scrolling: touch; }
   .ksu-rail::-webkit-scrollbar { display: none; }
+  .ksu-rail__copy { display: none; }
   .ksu-rail__item { height: 62vh; scroll-snap-align: start; }
 }
 
