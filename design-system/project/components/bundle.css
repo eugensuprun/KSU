@@ -465,10 +465,6 @@ a:hover > .ksu-badge, a:focus-visible > .ksu-badge { color: var(--ink); }
 .ksu-cover__media { position: absolute; top: 0; right: 0; bottom: 0; z-index: 1; width: 58%; min-height: 0; }
 .ksu-cover__info { position: relative; z-index: 3; display: grid; gap: var(--space-6); justify-items: start; width: 36%; min-width: 280px; padding-top: 112px; }
 .ksu-cover__statement { margin: 0; color: var(--ink); font: 500 clamp(19px, 1.95vw, 28px) / 1.45 var(--font-label); text-transform: uppercase; }
-/* The PROMIN' wordmark stands in for the word at the end of the statement and links out */
-.ksu-cover__logo { display: inline-block; vertical-align: -0.35em; color: inherit; transition: color var(--ksu-hover); }
-.ksu-cover__logo svg { display: block; width: auto; height: 1.4em; fill: currentColor; }
-.ksu-cover__logo:hover { color: var(--accent); }
 .ksu-cover__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4) var(--space-8); margin-top: var(--space-4); }
 .ksu-cover__title { position: absolute; left: 0; bottom: 0; z-index: 0; display: block; width: max-content; margin: 0; color: var(--accent); font: 500 22vw / 0.74 var(--font-heading); letter-spacing: -0.03em; text-transform: uppercase; white-space: nowrap; }
 .ksu-cover__title--outline { z-index: 2; color: transparent; -webkit-text-stroke: 2px var(--accent); clip-path: inset(-10% 0 -10% 42%); pointer-events: none; }
@@ -540,6 +536,9 @@ a:hover > .ksu-badge--solid, a:focus-visible > .ksu-badge--solid { background: v
 .ksu-spec dt { color: var(--ink-muted); font: 400 12px/17px var(--font-mono); text-transform: uppercase; }
 .ksu-spec dd { display: grid; gap: var(--space-2); margin: 0; min-width: 0; }
 .ksu-spec b { color: var(--ink); font: 500 clamp(28px, 3.6vw, 56px) / 0.95 var(--font-heading); letter-spacing: -0.02em; text-transform: uppercase; }
+/* A wordmark in place of the big name: taller than the type it replaces, because the mark is condensed */
+.ksu-spec__logo { justify-self: start; color: var(--ink); }
+.ksu-spec__logo svg { display: block; width: auto; height: clamp(48px, 6vw, 96px); fill: currentColor; }
 .ksu-spec span { color: var(--ink-muted); font: 400 16px/22px var(--font-sans); }
 .ksu-spec__run { color: var(--ink); font: 500 clamp(14px, 1.2vw, 18px) / 1.5 var(--font-heading); letter-spacing: -0.01em; text-transform: uppercase; }
 .ksu-spec__run i { margin-inline: 0.4em; color: var(--accent); font-style: normal; }
@@ -549,7 +548,8 @@ a:hover > .ksu-badge--solid, a:focus-visible > .ksu-badge--solid { background: v
 .ksu-spec a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .ksu-paper .ksu-spec > div { border-color: var(--paper-line); }
 .ksu-paper .ksu-spec dt, .ksu-paper .ksu-spec span { color: var(--on-paper-muted); }
-.ksu-paper .ksu-spec b, .ksu-paper .ksu-spec__run { color: var(--on-paper); }
+.ksu-paper .ksu-spec b, .ksu-paper .ksu-spec__run, .ksu-paper .ksu-spec__logo { color: var(--on-paper); }
+.ksu-paper .ksu-spec a:hover { color: var(--accent-deep); }
 .ksu-paper .ksu-spec__run i { color: var(--accent-deep); }
 @media (max-width: 720px) { .ksu-spec > div { grid-template-columns: minmax(0, 1fr); padding-block: var(--space-4); } }
 
