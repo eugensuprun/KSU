@@ -5,7 +5,7 @@
   var has = !!(gsap && ST);
   var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var on = has && !reduce;
-  var api = { version: '0.27.0', smoother: null };
+  var api = { version: '0.28.0', smoother: null };
 
   if (has) {
     gsap.registerPlugin.apply(gsap, [ST, Split, Smoother].filter(Boolean));
@@ -358,7 +358,7 @@
     pass.to(el, { '--ksu-dim': 0.7, ease: 'none' }, 0);
   }
 
-  // A row of tall photographs that travels sideways while its section is held in the middle of the screen. data-ksu-rail.
+  // A row of tall photographs. On wide screens it runs by itself in an endless loop; on phones it is a sideways swipe. data-ksu-rail.
   function rail(el) {
     var track = el.querySelector('.ksu-rail__track');
     if (!on || !track) return;
@@ -385,10 +385,30 @@
       // A way to show every photograph at once, for debugging.
       api.openRail = function () { gsap.set(shots, { clearProps: 'clipPath,scale' }); };
     }
+    // On phones the row stays an ordinary sideways swipe.
     if (window.innerWidth < 721) return;
-    var travel = function () { return Math.max(0, track.scrollWidth - el.clientWidth); };
-    gsap.to(track, { x: function () { return -travel(); }, ease: 'none',
-      scrollTrigger: { trigger: el, start: 'center center', end: function () { return '+=' + travel(); }, pin: true, scrub: 1, invalidateOnRefresh: true } });
+    // On wider screens it runs by itself in an endless loop: a second copy of the photographs follows the first,
+    // and the row wraps round when the first copy has gone by. It rests while it is off screen.
+    el.style.overflow = 'hidden';
+    items.forEach(function (it) {
+      var copy = it.cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');
+      var img = copy.querySelector('img');
+      if (img) { img.alt = ''; gsap.set(img, { clearProps: 'clipPath,scale' }); }
+      track.appendChild(copy);
+    });
+    var x = 0, speed = 45, visible = true;
+    gsap.ticker.add(function (time, delta) {
+      if (!visible) return;
+      var half = track.children[items.length].offsetLeft - items[0].offsetLeft;
+      if (!half) return;
+      x -= speed * Math.min(delta, 100) / 1000;
+      if (x <= -half) x += half;
+      gsap.set(track, { x: x });
+    });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; }).observe(el);
+    }
   }
 
   // The fixed booking button. It appears once the hero has gone by, leaves when the footer arrives, switches to its inverse colours while it sits over the
